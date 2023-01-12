@@ -1,0 +1,133 @@
+<section>
+
+    <div class="page-wrapper">
+
+        <main class="main">
+
+            <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
+                style="background-image: url('/images/backgrounds/login-bg.jpg')">
+                <div class="container">
+                    <div class="form-box">
+                        <div class="form-tab">
+                            <ul class="nav nav-pills nav-fill" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="register-tab-2" data-toggle="tab" href="#register-2"
+                                        role="tab" aria-controls="register-2" aria-selected="true">Register</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div class="row">
+                                    <div class="tab-pane fade show active" id="register-2" role="tabpanel"
+                                        aria-labelledby="register-tab-2">
+                                        <form action="/adduser" method="post">
+                                            <p id="errorRegister" class="text-center" style="color: rgb(400, 90, 32);"></p>
+                                            <div class="col-md-12 col-12" style="float: left;">
+                                                <div class="form-group">
+                                                    <div class="display d-flex">
+                                                        <label for="register-email-2" class="w-25" >First Name<span
+                                                                class="text-danger">*</span></label>
+                                                        <p class="d-flex w-75 justify-content-end " style="color: rgb(400, 90, 32);"></p>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="fName"
+                                                        name="firstName" required onblur="validateName">
+                                                </div><!-- End .form-group -->
+                                            </div>
+
+                                            <div class="col-md-12 col-12" style="float: left">
+                                                <div class="form-group">
+                                                        <div class="display d-flex">
+                                                            <label for="register-email-2" class="w-25">Last Name<span
+                                                                    class="text-danger">*</span></label>
+                                                                    <p class="d-flex w-75 justify-content-end " style="color: rgb(400, 90, 32);"></p>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="lName"
+                                                            name="lastName" required>
+                                                </div>
+                                            </div>
+                                                <div class="col-md-12 col-12" style="float: left;">
+                                                    <div class="form-group">
+                                                            <div class="display d-flex">
+                                                                <label for="register-email-2" class="w-25" >Email<span
+                                                                        class="text-danger">*</span></label>
+                                                                        <p class="d-flex w-75 justify-content-end " style="color: rgb(400, 90, 32);"></p>
+
+                                                            </div>
+                                                            <input type="email" class="form-control"
+                                                                id="email" name="email" required onblur="validateEmail">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12 col-12" style="float: left;">
+                                                        <div class="form-group">
+                                                            <div class="display d-flex">
+                                                                <label for="register-email-2" class="w-25">password<span
+                                                                        class="text-danger">*</span></label>
+                                                                        <p class="d-flex w-75 justify-content-end " style="color: rgb(400, 90, 32);"></p>
+                                                            </div>
+                                                            <input type="password" class="form-control"
+                                                                id="password" name="password" required onblur="validatePassword">
+                                                                <label id="password-error" class="errorLabel text-danger" for="password"></label>
+
+  
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-12" style="float: left;">
+                                                        <div class="form-group">
+                                                                <div class="display d-flex">
+                                                                    <label for="register-email-2" class="w-50">Confirm
+                                                                        password<span
+                                                                            class="text-danger">*</span></label>
+                                                                            <p class="d-flex w-50 justify-content-end " style="color: rgb(400, 90, 32);"></p>
+                                                                </div>
+                                                                <input type="password" class="form-control"
+                                                                    id="confirmPassword"
+                                                                    name="confirmPassword" required>
+                                                            </div><!-- End .form-group -->
+                                                        </div>
+
+                                                        <div class="col-md-12 col-12" style="float: left;">
+                                                            <div class="form-group">
+                                                                <div class="form-group">
+                                                                    <div class="display d-flex">
+                                                                        <label for="register-email-2"
+                                                                            class="w-25">Mobile No<span
+                                                                                class="text-danger">*</span></label>
+                                                                                <p class="d-flex w-75 justify-content-end " style="color: rgb(400, 90, 32);"></p>
+
+                                                                    </div>
+                                                                    <input type="text" class="form-control"
+                                                                        id="mobile" name="contactNo"
+                                                                        required>
+                                                                </div><!-- End .form-group -->
+                                                            </div>
+
+                                                            <div class="form-footer col-md-12 col-12 ">
+                                                                <button type="submit" id="button" class="btn btn-outline-primary-2">
+                                                                    <div>Add User</div>
+                                                                    <i class="icon-long-arrow-right"></i>
+                                                                </button>
+                                                                <% if(locals.newuser) {%>
+                                                                 <p>User Added Sucessfully</p> 
+                                                                 <% }%  
+
+                                                                
+                                                            </div><!-- End .form-footer -->
+                                        </form>
+                                    
+                                    </div><!-- .End .tab-pane -->
+                                </div>
+                            </div><!-- End .tab-content -->
+                        </div><!-- End .form-tab -->
+                    </div><!-- End .form-box -->
+                </div><!-- End .container -->
+            </div><!-- End .login-page section-bg -->
+        </main><!-- End .main -->
+
+    </div><!-- End .page-wrapper -->
+
+    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+    <!-- Mobile Menu -->
+
+</section>

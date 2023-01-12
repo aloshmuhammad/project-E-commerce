@@ -1,0 +1,48 @@
+<section>
+
+    <div class="container">
+        <table class="table"id="userstable">
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Color</th>
+          <th scope="col">SIZE</th>
+          <th scope="col">BRAND</th>
+          <th scope="col">Description</th>
+          <th scope="col">Category</th>
+          <th scope="col">Images</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% console.log("fahihzihi",) %>
+       
+          <%  products.forEach(product => { %>
+       
+        <tr>
+          <td><%= product.title %></td>
+          <td><%= product.color %></td>
+          <td><%= product.size%></td>
+          <td><%= product.brand %></td>
+          <td><%= product.description %></td>
+          
+          <td><%= product.category %></td>
+        
+          <td ><img class="mx-auto" style="width: 80px; height: 80px; object-fit: contain;" src="/ad asset/productImages/<%= product.productImage[0] %>" alt=""></td>
+          <!-- <td ><img class="mx-auto" style="width: 50px; height: 50px; object-fit: contain;" src="/imgs/people/avatar2.jpg" alt=""></td> -->
+            
+          
+        </tr>
+        <% })%>
+        
+      </tbody>
+    </table>
+    </div>
+    
+    </section>
+   
+    <script>
+      $(document).ready( function () {
+        $('#userstable').DataTable();
+    } );
+    </script>
+    </section>

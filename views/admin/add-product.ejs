@@ -1,0 +1,135 @@
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Add New Product</h2>
+               
+            </div>
+        </div>
+        <form action="/admin/add-product" method="post" enctype="multipart/form-data">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <label for="product_title" class="form-label">Product title</label>
+                        <input type="text" placeholder="Type here" class="form-control" id="product_title" name="title">
+                    </div>
+                    <div class="row gx-3">
+                       
+                        <div class="col-md-4  mb-3">
+                            <label for="product_color" class="form-label">Color</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_color" name="color">
+                        </div>
+                        <div class="col-md-4  mb-3">
+                            <label for="product_size" class="form-label">Size</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_size" name="size">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="product_brand" class="form-label">Brand</label>
+                        <input type="text" placeholder="Type here" class="form-control" id="product_brand"name="brand">
+                    </div>
+                    <div class="col-md-4  mb-3">
+                        <label for="product_color" class="form-label">Price</label>
+                        <input type="text" placeholder="Type here" class="form-control" id="product_color" name="price">
+                        <div class="col-md-4  mb-3">
+                            <label for="product_color" class="form-label">Stock</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_color" name="stock">
+                    </div>
+                </div>
+            </div> <!-- card end// -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div>
+                        <label class="form-label">Description</label>
+                        <textarea placeholder="Type here" class="form-control" rows="4" name="description"></textarea>
+                    </div>
+                </div>
+            </div> <!-- card end// -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex gap-3 mb-3">
+                    <div>
+                        
+                            <img style="height: 60px; width: 80px;" id="file-ip-0-preview">
+                        </div>
+                           <div>
+                                <img style="height: 60px; width: 80px;" id="file-ip-1-preview">
+                            </div>
+                                <div>
+                                    <img style="height: 60px; width: 80px;" id="file-ip-2-preview">
+                                </div>
+                                    <div class="preview">
+                                        <img style="height: 60px; width: 80px;" id="file-ip-3-preview">
+                                    </div>
+                                </div>
+                         
+                          <label for="file-ip-1">Upload Image</label>
+                          <input type="file" id="file-ip-1" accept="image/*" onchange="showPreview(event)" name="productImage" multiple>
+                          
+                        
+
+                    </div>
+                </div>
+            </div> <!-- card end// -->
+        </div>
+        <div class="col-lg-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                   
+                    <hr>
+                    
+                    <h5 class="mb-3">Categories</h5>
+                    <% for( var category of categories) { %>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="<%= category.name %>" id="product-cat" name="category">
+                        <label class="form-check-label" for="product-cat"><%= category.name %></label>
+                    </div>
+                    
+                    <% } %>
+                    <div>
+                    
+                        <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
+                    </div>
+                 
+            </div> <!-- card end// -->
+           
+        </div>
+       
+    </div>
+    <div>
+        <% if(locals.upload) {%>
+            <p>Product Uploaded Sucessfully</p>
+            <% } %>
+    </div>
+        </form>
+</section>
+<footer class="main-footer font-xs">
+    <div class="row pb-30 pt-15">
+        <div class="col-sm-6">
+            <script>
+            document.write(new Date().getFullYear())
+            </script> ©, Evara - HTML Ecommerce Template .
+        </div>
+        <div class="col-sm-6">
+            <div class="text-sm-end">
+                All rights reserved
+            </div>
+        </div>
+    </div>
+</footer>
+</main>
+<script>
+ 
+     function showPreview(event){
+ for(i=0;i<=3;i++)
+ {
+  if(event.target.files.length > 0){
+    var src = URL.createObjectURL(event.target.files[i]);
+    var preview = document.getElementById(`file-ip-${i}-preview`);
+    preview.src = src;
+    preview.style.display = "block";
+  }
+}
+     }
+</script>
