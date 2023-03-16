@@ -1,188 +1,296 @@
 const layout='./admin/adminlayout'
 const { response } = require('express')
-var adminHelper=require('../helpers/Adminhelpers')
-
+var adminHelper=require('../Model/helpers/Adminhelpers')
+const {adminLOgin,getAllUsers,blockUser,unblockUser,adminAddcat,getAllCategory,deleteCategory,getCategory,editcategoryp,addproduct,getAllproducts,deleteProducts,getproducts,editproductPost,getOrders,getOrdersad,vieworderedproducts,statusPin,adminSalesGraph,downloadReport, CouponAd,getAllCoupons,deleteCoupons}=adminHelper
 
 module.exports=
 {
-    homepage:(req,res,next)=>
-    {
+    homePage:(req,res,next)=>
+    { 
+        try{
         res.render('admin/adsignin',{layout})
-    },
-    addash:(req,res,next)=>
-    {
-        if(req.session.loggedInad)
+        }
+        catch(error)
         {
-     res.render('admin/indexad',{layout,adin:true})
+            res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
         }
-        else{
-            res.redirect('/admin')
-        }
+       
     },
-    adsigninpost:(req,res,next)=>
+    adDash:(req,res,next)=>
     {
-        adminHelper.adminLOgin(req.body).then((response)=>
-        {  
-            let admina=response.status;
+        try{
+            if(req.session.loggedInad)
+            {
+                adminSalesGraph().then((Data)=>
+                { console.log(Data.DeliveredCount,'ljh');
+                
+                
+                    res.render('admin/indexad',{layout,adin:true,Data})
+                })    
         
-            if(admina)
-            {   req.session.loggedInad=true
-                req.session.admin=response.validadmin
-                res.redirect('/admin/dashboard')
-    
             }
             else{
                 res.redirect('/admin')
             }
-        })
+        }
+        catch(error)
+        {
+            res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+        }
+     
+    },
+    adsigninPost:(req,res,next)=>
+    {
+        try{
+            adminLOgin(req.body).then((response)=>
+            {  
+                let admina=response.status;
+            
+                if(admina)
+                {   req.session.loggedInad=true
+                    req.session.admin=response.validadmin
+                    res.redirect('/admin/dashboard')
+        
+                }
+                else{
+                    res.redirect('/admin')
+                }
+            }).catch(error=>{
+                console.log(error,"sadf")
+                res.status(500).send(error.message)
+              })
+        }
+        catch(error)
+        {
+            res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+        }
+      
     },
     viewUsers:(req,res,next)=>
 {
-    if(req.session.loggedInad){
-        adminHelper.getAllUsers().then((users)=>
-    {
-    
-  res.render('admin/viewusers',{layout,adin:true,users});
-    })
+    try{
+        if(req.session.loggedInad){
+            getAllUsers().then((users)=>
+        {
         
+      res.render('admin/viewusers',{layout,adin:true,users});
+        }).catch(error=>{
+            console.log(error,"sadf")
+            res.status(500).send(error.message)
+          })
+            
+        }
+        else{
+            res.redirect('/admin')
+        }
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+ 
+    
+
+},
+
+blockUser:(req,res,next)=>
+{
+    try{
+        if(req.session.loggedInad)
+        {
+        let userid=req.params.id
+        console.log(userid);
+        blockUser(userid).then((response)=>
+        {
+        
+            res.redirect('/admin/viewusers')
+        
+        }).catch(error=>{
+            console.log(error,"sadf")
+            res.status(500).send(error.message)
+          })
     }
     else{
         res.redirect('/admin')
     }
-    
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
 
 },
-
-BlockUser:(req,res,next)=>
+unblockUser:(req,res,next)=>
 {
     
-    if(req.session.loggedInad)
+    try{
+        let userid=req.params.id
+        console.log(userid);
+        unblockUser(userid).then((response)=>
+        {
+        
+            res.redirect('/admin/viewusers')
+        
+        }). catch(error=>{
+            console.log(error,"sadf")
+            res.status(500).send(error.message)
+          })
+    }
+    catch(error)
     {
-    let userid=req.params.id
-    console.log(userid);
-    adminHelper.blockUser(userid).then((response)=>
-    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
     
-        res.redirect('/admin/viewusers')
     
-    })
-}
-else{
-    res.redirect('/admin')
-}
-},
-UnblockUser:(req,res,next)=>
-{
-    
-    if(req.session.loggedInad)
-    {
-    let userid=req.params.id
-    console.log(userid);
-    adminHelper.unblockUser(userid).then((response)=>
-    {
-    
-        res.redirect('/admin/viewusers')
-    
-    })
-}
-else{
-    res.redirect('/admin')
-}
+ 
 },
 category:(req,res,next)=>
 {
-    if(req.session.loggedInad)
+    try{
+        res.render('admin/add-category',{layout,adin:true})
+    
+    }
+    catch(error)
     {
-    res.render('admin/add-category',{layout,adin:true})
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
     }
-    else{
-        res.redirect('/admin')
-    }
+    
+    
+    
+    
 },
-Addcategory:(req,res,next)=>
+addCategory:(req,res,next)=>
 {
-
-    adminHelper.adminAddcat(req.body).then((category)=>
+    try {
+        adminAddcat(req.body).then((category)=>
+        {
+        let oldcat = category.status
+        if(oldcat)
+        { 
+            res.render('admin/view-category',{layout,olduser,adminin:true})
+        
+        }
+        else{
+            res.redirect('/admin/view-category')
+        
+        }
+        }).catch(error=>{
+            console.log(error,"sadf")
+            res.status(500).send(error.message)
+          })
+          
+    } 
+    catch(error)
     {
-    let oldcat = category.status
-    if(oldcat)
-    { 
-        res.render('admin/view-category',{layout,olduser,adminin:true})
-    
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
     }
-    else{
-        res.redirect('/admin/view-category')
     
-    }
-    })
-    
+
+
+
 },
 viewCategory:(req,res,next)=>
 {
-    if(req.session.loggedInad){
-        adminHelper.getAllCategory().then((categories)=>
-    {
-    
-  res.render('admin/view-category',{layout,adin:true,categories});
-    })
+    try{
+        getAllCategory().then((categories)=>
+        {
         
+      res.render('admin/view-category',{layout,adin:true,categories});
+        })
+            
     }
-    else{
-        res.redirect('/admin')
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
     }
+    
+    
+        
+    
+   
     
 
 },
-DeleteCategory:(req,res,next)=>
+deleteCategory:(req,res,next)=>
 {
     
-    if(req.session.loggedInad)
+    try{
+        let userid=req.params.id
+        console.log(userid);
+        deleteCategory(userid).then((response)=>
+        {
+        
+            res.redirect('/admin/view-category')
+        
+        })
+    }
+    catch(error)
     {
-    let userid=req.params.id
-    console.log(userid);
-    adminHelper.deleteCategory(userid).then((response)=>
-    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
     
-        res.redirect('/admin/view-category')
+  
+
+},
+editCategory:(req,res,next)=>
+{
+    let userid=req.params.id
+    try{
+        getCategory(userid).then((category)=>
+        {
+    res.render('admin/edit-category',{layout,adin:true,category})
     
     })
-}
-},
-Editcategory:(req,res,next)=>
-{
-    let userid=req.params.id
-    adminHelper.getCategory(userid).then((category)=>
+    }
+    catch(error)
     {
-res.render('admin/edit-category',{layout,adin:true,category})
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+    
 
-})
+
     },
- Editcategorypost:(req,res,next)=>
+ editcategoryPost:(req,res,next)=>
  {
     console.log(req.body);
-    
-    
-    adminHelper.editcategoryp(req.body).then((response)=>
+    try
     {
-        res.redirect('/admin/view-category')
+   
+        editcategoryp(req.body).then((response)=>
+        {
+            res.redirect('/admin/view-category')
+    
+        })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
 
-    })
+ 
  }   ,
- AddProduct:(req,res,next)=>
- {if(req.session.loggedInad)
-    {
-        adminHelper.getAllCategory().then((categories)=>
+ addProduct:(req,res,next)=>
+ {
+    try{
+        getAllCategory().then((categories)=>
         {
     res.render('admin/add-product',{layout,adin:true,categories})
     })
-}
-    else{
-        res.redirect('/admin')
     }
- },
- AddProductpost:(req,res,next)=>
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
 
- { const files=req.files
+  
+
+ },
+ addproductPost:(req,res,next)=>
+
+ { 
+    try
+    {
+        const files=req.files
     const filename=files.map((file)=>
     {
         return file.filename
@@ -191,7 +299,7 @@ res.render('admin/edit-category',{layout,adin:true,category})
     product.productImage = filename
 
 
-    adminHelper.addproduct(req.body).then((response)=>
+    addproduct(req.body).then((response)=>
     {    
         
         const files=req.files
@@ -200,12 +308,17 @@ res.render('admin/edit-category',{layout,adin:true,category})
         
         res.redirect('/admin/add-product')
     })
+}
+catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
  },
  viewProducts:(req,res,next)=>
  {  
-    if(req.session.loggedInad)
-    { 
-        adminHelper.getAllproducts().then((products)=>
+    try{
+        getAllproducts().then((products)=>
         {  
             // console.log(products[0]);
            // products.forEach(element => {
@@ -213,36 +326,47 @@ res.render('admin/edit-category',{layout,adin:true,category})
            // });
               res.render('admin/product-list',{layout,adin:true,products})
         })
-  
     }
-    else
+    catch(error)
     {
-        res.redirect('/admin')
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
     }
+
+       
+  
+  
+    
     
  },
  deleteProduct:(req,res,next)=>
  {
- 
-    if(req.session.loggedInad)
-    {
+ try{
     let productid=req.params.id
     console.log(productid);
-    adminHelper.deleteProducts(productid).then((response)=>
+    deleteProducts(productid).then((response)=>
     {
     
         res.redirect('/admin/view-products')
     
     })
-}
+ }
+ catch(error)
+ {
+     res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+ }
+
+    
+   
+
  },
  editProducts:(req,res,next)=>
- { let productid=req.params.id
-    if(req.session.loggedInad)
+ { 
+    try{
+    let productid=req.params.id
+    
+    getproducts(productid).then((products)=>
     {
-    adminHelper.getproducts(productid).then((products)=>
-    {
-        adminHelper.getAllCategory().then((categories)=>
+        getAllCategory().then((categories)=>
         {
             res.render('admin/edit-product',{layout,adin:true,products,categories})
         })
@@ -250,17 +374,23 @@ res.render('admin/edit-category',{layout,adin:true,category})
         
         
     })
-}
-else{
-    res.redirect('/admin')
-}
+ }
+ catch(error)
+ {
+     res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+ }
+
+
+   
+
+
  
  },
  editProductpost:(req,res,next)=>
  {
     console.log(req.files,'file')
     console.log(req.body,'body');
-
+try{
     let data =req.body
     let images=req.files
     // let img0 =""
@@ -286,36 +416,149 @@ else{
     // }
 
 
-    adminHelper.editproductPost(data,images).then((response)=>
+    editproductPost(data,images).then((response)=>
     {
        
     res.redirect('/admin/view-products')
     })
- },
- Logout:(req,res,next)=>
+}
+catch(error)
  {
-    req.session.loggedInad=false
-    req.session.admin=null
-//req.session.destroy();
-res.redirect('/admin');
+     res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+ }
+
+ 
+ },
+ LogOut:(req,res,next)=>
+ {
+    try{
+        req.session.loggedInad=false
+        req.session.admin=null
+    //req.session.destroy();
+    res.redirect('/admin');
+    }
+    catch(error)
+ {
+     res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+ }
+
+ 
 },
 viewOrders:async(req,res,next)=>
 {
-
-    let orders=await adminHelper.getOrders()
+try{
+    let orders=await getOrders()
     res.render('admin/orderlist',{layout,adin:true,orders})
+}
+catch(error)
+{
+    res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+}
+
+
+    
 },
 orderDetail:async(req,res,next)=>
 {
-    let orders=await adminHelper.getOrdersad(req.params.id)
-    let orderedproducts=await adminHelper.vieworderedproducts(req.params.id)
-    res.render('admin/orderdetail',{layout,adin:true,orderedproducts,orders})
+    try{
+        let orders=await getOrdersad(req.params.id)
+        let orderedproducts= await vieworderedproducts(req.params.id)
+        res.render('admin/orderdetail',{layout,adin:true,orderedproducts,orders})
+    }
+    catch(error)
+{
+    res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+}
+
+   
 },
 statusChange:(req,res,next)=>
-{console.log(req.body,'hbhb');
-    adminHelper.statusPin(req.body).then((response)=>
+{
+    console.log(req.body,'hbhb');
+try
+{
+    statusPin(req.body).then((response)=>
     {
         res.json(response)
+    })
+}
+catch(error)
+{
+    res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+}
+
+
+    
+},
+downloadReport:async(req,res,next)=>
+{
+try{
+    let Orders= await downloadReport()
+    let Data= await adminSalesGraph()
+
+        console.log(Orders,'ev');
+        res.render('admin/sales-report',{layout,adin:true,Orders,Data})
+
+    
+}
+catch(error)
+{
+    res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+}
+},
+AddCoupon:(req,res,next)=>
+{
+try
+{
+    res.render('admin/coupon-manage',{layout,adin:true,})
+}
+catch(error)
+{
+    res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+}
+
+},
+addNewcpn:(req,res,next)=>
+{
+    console.log(req.body,'asdf');
+    try
+    {
+        CouponAd(req.body).then((response)=>
+        {
+            res.render('admin/coupon-manage',{layout,adin:true,cpn:true})
+        })
+    }
+    catch(error)
+{
+    res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+}
+
+
+
+  
+   
+},
+couponView:async(req,res,next)=>
+{
+    try
+    {
+       let Coupons= await getAllCoupons()
+       console.log(Coupons,'cpn');
+    res.render('admin/view-coupon',{layout,adin:true,Coupons})
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+},
+DeleteCoupon:(req,res,next)=>
+{
+    let Id=req.query.id
+    console.log(Id,'fck');
+    deleteCoupons(Id).then((response)=>
+    {
+        res.redirect('/admin/view-coupons')
     })
 }
 

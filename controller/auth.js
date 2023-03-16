@@ -1,6 +1,6 @@
 module.exports=
 {
-    verifyadmin:(req,res,next)=>
+    verifyAdmin:(req,res,next)=>
     {
         if(req.session.loggedInad)
         {
@@ -12,7 +12,7 @@ module.exports=
         }
 
     },
-    verifyuser:(req,res,next)=>
+    verifyUser:(req,res,next)=>
     {
         if(req.session.loggedIn)
         {

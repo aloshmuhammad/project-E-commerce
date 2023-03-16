@@ -1,0 +1,44 @@
+<section>
+
+    <div class="container">
+        <table class="table"id="userstable">
+      <thead>
+        <tr>
+          <th scope="col"> Coupon ID</th>
+          <th scope="col">EXPIRY DATE</th>
+          <th scope="col">OFFER PERCENTAGE</th>
+          <th scope="col">MAXIMUM PRICE REDUCTION</th>
+          <th scope="col">MINIMUM SHOPPING AMOUNT TO APPPLY COUPON</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%Coupons.forEach(coupon=>{ %>
+
+     
+        
+        <tr>
+          <td><%= coupon.couponid %></td>
+          <td><%= coupon.date %></td>
+          <td><%= coupon.offerpercentage%></td>
+          <td><%= coupon.reducedmaxamount %></td>
+          <td><%= coupon.minprice%></td>
+          
+          
+          <td>
+            
+            <a href="/admin/delete-coupon/?id=<%=coupon._id%>" class="btn btn-danger" onclick="return confirm('do you want to delete <%=coupon.couponid %>')">Delete</a>
+          
+        </td>
+        </tr>
+        <% })%>
+        
+      </tbody>
+    </table>
+    </div>
+    </section>
+    <script>
+      $(document).ready( function () {
+        $('#userstable').DataTable();
+    } );
+    </script>
+    </section>

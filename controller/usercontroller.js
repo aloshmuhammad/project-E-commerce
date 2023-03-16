@@ -1,79 +1,132 @@
 const { Db, ObjectId } = require('mongodb');
-const Adminhelpers = require('../helpers/Adminhelpers');
-var userHelper=require('../helpers/Userhelpers');
+const { getAllUsers } = require('../Model/helpers/Adminhelpers');
+const Adminhelpers = require('../Model/helpers/Adminhelpers');
+var userHelper=require('../Model/helpers/Userhelpers');
 const router = require('../routes/users');
+const paypal=require('paypal-rest-sdk')
+const Razorpay = require('razorpay');
+const crypto = require('crypto')
+const {getMenproduct,getWomenproducts,getcartCount,getAllproducts,addUserSignup,doUserLOgin,Dootplogin,viewproductUser,validOtp,addTocart,getTotal,changeProductquantity,cartView,removeProductcart,getproductList,orderPost,vieworders,vieworderedProducts,cancelOrderlist,otppassCheck,otpvc,retypePass,editAccount,accountEdit,addressSubmit,getUsers,allAddresses,chngeDefault, paymentStatusChange,TotalProductView,SrchPro,checkCoupon,returnOrder,generateRazorpay, verifyPaymentRazorpay}=userHelper
+require('dotenv').config()
+
+paypal.configure({
+  'mode': 'sandbox', //sandbox or live
+  'client_id': process.env.Client_id,
+  'client_secret': process.env.Client_secret
+});
+
 module.exports = {
+  
 homePage: async(req, res, next)=> {
-  
-  let user= req.session.user
-  
-  if(user)
-  {
-    let name=user.firstName
+  try{
+    let user= req.session.user
+    let menProducts=await getMenproduct()
+      let womenProducts=await getWomenproducts()
+      console.log('women=',womenProducts);
     
-    let cartCount=await userHelper.getcartCount(user._id)
-    userHelper.getAllproducts().then((products)=>
+    if(user)
     {
-     
-    
-      res.render('index',{user,products,cartCount,name});
-    })
-    
-  }
-  else{
-    userHelper.getAllproducts().then((products)=>
-    {
+      let name=user.firstName
       
-    
-      res.render('index',{user,products});
-    })
-    
+      let cartCount=await getcartCount(user._id)
+      
+      getAllproducts().then((products)=>
+      {
+       
+      
+        res.render('index',{user,products,cartCount,name,menProducts,womenProducts});
+      })
+      
+    }
+    else{
+      
+      getAllproducts().then((products)=>
+      {
+       
+      
+        res.render('index',{user,products,menProducts,womenProducts});
+      })
+      
+    }
+  }
+  catch(error)
+  {
+      res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
   }
 
   },
-  signin:(req,res,next)=>
-  {  if(req.session.loggedIn)
+
+signIn:(req,res,next)=>
+  { 
+    try{
+    if(req.session.loggedIn)
     {
       
     res.redirect('/')
     }
   else
    {
-  res.render('users/signin',{user:false})
+  res.render('users/signin',{user:false,users:true})
    }
+  }
+  catch(error)
+  {
+      res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+  }
+  
+   
 
   },
-  signup:(req,res,next)=>
+  signUp:(req,res,next)=>
   {
-    if(req.session.loggedIn)
-    {
-      res.redirect('/')
-    }
-    else
-    {
-    res.render('users/signup')
-    }
-  },
-  signuppost:(req,res,next)=>
-  {
-    userHelper.addUserSignup(req.body).then((user)=>
-    { 
-    
-      
-      let olduser=user.status
-      if(olduser)
+    try{
+      if(req.session.loggedIn)
       {
-        res.render('users/signup')
+        res.redirect('/')
       }
-      else{
-  
-      res.render('users/signin',{nouser:true})
+      else
+      {
+      res.render('users/signup',{users:true})
       }
-    })
-  },
-  signinpost:(req,res,next)=>
+    }
+    catch(error)
   {
-        userHelper.doUserLOgin(req.body).then((response)=>
+      res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+  }
+  
+
+  
+  },
+  signupPost:(req,res,next)=>
+  {
+    try
+    {
+      addUserSignup(req.body).then((user)=>
+      { 
+      
+        
+        let olduser=user.status
+        if(olduser)
+        {
+          res.render('users/signup')
+        }
+        else{
+    
+        res.render('users/signin',{nouser:true})
+        }
+      })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+  
+  },
+  signinPost:(req,res,next)=>
+  {
+    try{
+      doUserLOgin(req.body).then((response)=>
       {
     
         if(response.status)
@@ -86,70 +139,121 @@ homePage: async(req, res, next)=> {
           res.render('users/signin',{nouser:true,user:false})
         }
       })
-      },
-      logoutuser:(req,res,next)=>
-      {
-    
-          req.session.loggedIn=false;
-         req.session.user=null
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
 
   
-     res.redirect("/login");
       },
-      otplogin:(req,res,next)=>
+      logoutUser:(req,res,next)=>
+      {
+    try{
+      req.session.loggedIn=false;
+      req.session.user=null
+
+
+  res.redirect("/login");
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+         
+      },
+      otpLogin:(req,res,next)=>
       {
         res.render('users/otpsign',{user:false})
       },
-     otppost: (req,res,next)=>
+     otpPost: (req,res,next)=>
       {
-        userHelper.Dootplogin(req.body).then((response)=>
+        try
         {
-        if(response.status)
+          Dootplogin(req.body).then((response)=>
+          {
+          if(response.status)
+          {
+            req.session.user=response.user
+          req.session.contactNo=req.body.contactNo
+        
+  
+           res.render('users/otp-login',{user:false})
+          }
+          else
+          {
+           res.render('users/otpsign',{user:false,novalidotp:true})
+          }
+        })
+        }
+        catch(error)
         {
-          req.session.user=response.user
-        req.session.contactNo=req.body.contactNo
-      
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+        }
 
-         res.render('users/otp-login',{user:false})
-        }
-        else
-        {
-         res.render('users/otpsign',{user:false,novalidotp:true})
-        }
-      })
+       
    },
-   otpvalid:(req,res,next)=>
+   otpValid:(req,res,next)=>
    {
-    res.render('users/otp-login',{user:false})
+    try{
+      res.render('users/otp-login',{user:false})
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+   
    },
    validateOtp:(req,res,next)=>
    {
-    let contactNo=req.session.contactNo
-
-    userHelper.validOtp(req.body,contactNo).then((response)=>
+    try
     {
-      if(response.valid)
+      let contactNo=req.session.contactNo
+
+      validOtp(req.body,contactNo).then((response)=>
       {
-        req.session.loggedIn=true;
-        res.redirect('/')
-      }
-      else{
-        res.render('users/otp-login',{user:false,novalidotp:true})
-      }
-    })
+        if(response.valid)
+        {
+          req.session.loggedIn=true;
+          res.redirect('/')
+        }
+        else{
+          res.render('users/otp-login',{user:false,novalidotp:true})
+        }
+      })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+
    },
    
    productPage:async(req,res,next)=>
       { 
-        let productid=req.params.id
-        let userId=req.session.user._id
+        try
+        {
+          let productid=req.params.id
+          let userId=req.session.user._id
+  
+       let name=req.session.user.firstName
+        let cartCount=await getcartCount(userId)
+        viewproductUser(productid).then((products)=>
+        {
+          res.render('users/productview',{user:true,login:true,products,cartCount,name})
+        })
+        }
+        catch(error)
+       {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+       }
 
-     let name=req.session.user.firstName
-      let cartCount=await userHelper.getcartCount(userId)
-      userHelper.viewproductUser(productid).then((products)=>
-      {
-        res.render('users/productview',{user:true,login:true,products,cartCount,name})
-      })
+
+    
       
     },
   
@@ -157,106 +261,341 @@ homePage: async(req, res, next)=> {
 
    addCart:async(req,res,next)=>
    {
-    productid=req.params.id
+    try
+    {
+      productid=req.params.id
     
       userid=req.session.user._id
       
-      userHelper.addTocart(productid,userid).then((response)=>
+      addTocart(productid,userid).then((response)=>
       {
       res.json(response)
       })
       
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+   
     },
 
    cart:async(req,res,next)=>
    {
-    
-    let Total=await userHelper.getTotal(req.session.user._id)
-    
-    
-    let cartCount=await userHelper.getcartCount(req.session.user._id)
-  
-    userHelper.cartView(req.session.user._id).then((cartItems)=>
+    try
     {
+
+      let Total=await getTotal(req.session.user._id)
     
-      
-        res.render('users/cart',{user:true,login:true,cartItems,cartCount,Total})
+    
+      let cartCount=await getcartCount(req.session.user._id)
+    
+      cartView(req.session.user._id).then((cartItems)=>
+      {
+      req.session.cartItems=cartItems
         
-     
-      
-    })
+          res.render('users/cart',{user:true,login:true,cartItems,cartCount,Total})
+          
+       
+        
+      })
+    }
+     catch(error)
+     { 
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+     }
+
+    
    },
    changeQuantity:(req,res,next)=>
    {
-    
-    userHelper.changeProductquantity(req.body).then((response)=>
+    try
     {
-      res.json(response)
-    })
+      changeProductquantity(req.body).then((response)=>
+      {
+        res.json(response)
+      })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+    
+  
    },
    removeProduct:(req,res,next)=>
    {
-    userHelper.removeProductcart(req.body).then((response)=>
+    try
     {
-     res.json(response)
-    })
+      removeProductcart(req.body).then((response)=>
+      {
+       res.json(response)
+      })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+   
    },
    orderProduct:async(req,res,next)=>
    {
-    let Total=await userHelper.getTotal(req.session.user._id)
-    
-    userHelper.cartView(req.session.user._id).then((cartItems)=>
+    try
     {
-      res.render('users/orderpay',{cartItems,Total})
-    })
+      let Total=await getTotal(req.session.user._id)
+      let user=await getUsers(req.session.user._id)
+    
+     
+    
+      cartView(req.session.user._id).then((cartItems)=>
+      {
+        res.render('users/orderpay',{cartItems,Total,user})
+      })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+   
     
    },
    placeorderPost:async(req,res,next)=>
    {
-    let user=req.session.user
+    
+      let user=req.session.user
   
-    console.log(req.body);
-    let product=await userHelper.getproductList(user._id)
-    let productprice=await userHelper.getTotal(user._id)
-    let totalamount=productprice[0].total
+      console.log(req.body,'shibin');
+     
+    
+      let product=await getproductList(user._id)
+      var totalamount=await getTotal(user._id)
+  
+      
+        
+    
+      console.log('dfsdfsdafds',totalamount);
+     
+      orderPost(req.body,user._id,product,totalamount[0].total).then((response)=>
+      {
+       let orderId=response.insertedId
+       req.session.orderID=orderId
+       req.session.totalamount= totalamount[0].total
+      
    
-    userHelper.orderPost(req.body,user._id,product,totalamount).then((response)=>
+
+      if(req.body.paymentmethod=='cod')
+      {
+        res.render('users/ordersucess',{user:true})
+      }
+     else if(req.body.paymentmethod == 'paypal'){
+
+      const create_payment_json = {
+          "intent": "sale",
+          "payer": {
+            "payment_method": "paypal"
+          },
+          "redirect_urls": {
+            "return_url": "http://localhost:3000/successPayment",
+            "cancel_url": "http://localhost:3000/cancel"
+          },
+          "transactions": [{
+            "item_list": {
+              "items": [{
+                "name": "Redhock Bar Soap",
+                "sku": "001",
+                "price": totalamount[0].total,
+                "currency": "USD",
+                "quantity": 1
+              }]
+            },
+            "amount": {
+              "currency": "USD",
+              "total": totalamount[0].total,
+            },
+            "description": "Molla Fashion Store"
+          }]
+        }
+        paypal.payment.create(create_payment_json, function (error, payment) {
+          if (error) {
+            throw error;
+          } else {
+            for (let i = 0; i < payment.links.length; i++) {
+              if (payment.links[i].rel === 'approval_url') {
+                res.redirect(payment.links[i].href);
+              }
+            }
+          }
+        });
+      
+  
+  
+   }
+   else if(req.body.paymentmethod=='razorpay')
+   {
+    generateRazorpay(orderId,totalamount[0].total).then((order)=>
     {
-    res.json({status:true})
+      console.log(order);
+     res.render('users/RazorPay',{order})
     })
-   },
+   }
+   else{
+      
+    
+    
+    
+    res.redirect('/order-payment')
+
+   }
+  })
+  
+  }
+
+,
+  paypalSucces: (req, res) => {
+    const payerId = req.query.PayerID;
+    const paymentId = req.query.paymentId;
+    let totalamount=req.session.totalamount
+    let orderID = req.session.orderID
+    console.log(orderID,'hgh');
+    user =req.session.user
+    
+    const execute_payment_json = {
+        
+      "payer_id": payerId,
+      "transactions": [{
+        "amount": {
+          "currency": "USD",
+          "total": totalamount
+        }
+      }]
+    };
+         // Obtains the transaction details from paypal
+         paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+          //When error occurs when due to non-existent transaction, throw an error else log the transaction details in the console then send a Success string reposponse to the user.
+          if (error) {
+            console.log(error.response);
+            throw error;
+          } else {
+            console.log(JSON.stringify(payment));
+            console.log(orderID,'amal');
+            paymentStatusChange(orderID).then((response)=>{
+                res.render('users/ordersucess')
+                req.session.orderID = null
+            
+                })
+           
+            
+          }
+        });
+
+
+   
+  },
+  
+ 
    successPage:(req,res,next)=>
    {
-    res.render('users/ordersucess')
+    try
+    {
+      res.render('users/ordersucess')
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+
+   
    },
    ordersList:async(req,res,next)=>
    {
-    userid=req.session.user._id
-   let orders= await userHelper.vieworders(userid)
+    try
+    {
+      userid=req.session.user._id
+    
+      let orders= await vieworders(userid)
+     
+   
+         res.render('users/orderlist',{orders,user:true})
+        
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
 
-      res.render('users/orderlist',{orders,user:true})
+
+    
     
    
    },
-   vieworderproducts:async(req,res,next)=>
+   vieworderProducts:async(req,res,next)=>
    {
-    let orderedproducts=await userHelper.vieworderedproducts(req.params.id)
-    res.render('users/orderdetails',{orderedproducts,user:true})
+    try
+    {
+      let orderedproducts=await vieworderedProducts(req.params.id)
+     
+      console.log(orderedproducts[0],'oot');
+       const date1 = new Date();
+       const date2 = new Date(orderedproducts[0].DeliveredDate);
+       const diffTime = Math.abs(date1 - date2);
+       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+       console.log(diffTime + " milliseconds");
+      console.log(diffDays + " days")
+
+      res.render('users/orderdetails',{orderedproducts,diffDays,user:true})
+        
+       
+      }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+
+
    },
    cancelOrder:(req,res,next)=>
    {
-    userHelper.cancelOrderlist(req.body).then((response)=>
+    try
     {
-      res.json(response)
-    })
+      console.log(req.body,'hhh');
+      cancelOrderlist(req.body).then((response)=>
+      {
+        
+        res.json(response)
+      })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+
+   
    },
-   otploginps:(req,res,next)=>
+   otpLoginps:(req,res,next)=>
    {
-    res.render('users/otploginpass',{user:false})
+    try
+    {
+      res.render('users/otploginpass',{user:false})
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+   
    },
-   otppass:(req,res,next)=>
+   otpPass:(req,res,next)=>
    {
-    userHelper.otppasscheck(req.body).then((response)=>
+    try
+    {
+      otppassCheck(req.body).then((response)=>
     {
     if(response.status)
     {
@@ -271,46 +610,326 @@ homePage: async(req, res, next)=> {
      res.render('users/otploginpass',{user:false,novalidotp:true})
     }
   })
-   },
-   otpv:(req,res,next)=>
-   {
-    res.render('users/otpvalidpass',{user:false})
-   },
-   vlidchck:(req,res,next)=>
-   {let contactNo=req.session.contactNo
-    userHelper.otpvc(req.body,contactNo).then((response)=>
+    }
+    catch(error)
     {
-      if(response.valid)
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+
+    
+   },
+   otPv:(req,res,next)=>
+   {
+    try
+    {
+      res.render('users/otpvalidpass',{user:false})
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+
+   
+   },
+   vlidChck:(req,res,next)=>
+   {
+    try
+    {
+      let contactNo=req.session.contactNo
+      otpvc(req.body,contactNo).then((response)=>
       {
-        
-        res.render('users/forgotpass',{user:false})
-      }
-      else{
-        res.render('users/otp-login',{user:false,novalidotp:true})
-      }
-    })
+        if(response.valid)
+        {
+          
+          res.render('users/forgotpass',{user:false})
+        }
+        else{
+          res.render('users/otp-login',{user:false,novalidotp:true})
+        }
+      })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+  
   
    },
-   passchck:(req,res,next)=>
+   passChck:(req,res,next)=>
    {
-    res.render('users/forgotpass')
+    try
+    {
+      res.render('users/forgotpass')
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+  
+
+    
    },
-   checkpass:(req,res,next)=>
+   checkPass:(req,res,next)=>
    {
-    let contactNoo=req.session.contactNo
-    userHelper.retypepass(req.body,contactNoo).then((response)=>
+    try
+    {
+      let contactNoo=req.session.contactNo
+      retypePass(req.body,contactNoo).then((response)=>
+      {
+        
+        res.render('users/forgotpass',{user:false,passchange:true})
+      })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+   
+   },
+   viewAccount:async(req,res,next)=>
+   {
+    try
+    {
+      let userId=req.session.user._id
+   
+      console.log(userId,'prf')
+     let usersPro=await userHelper.editAccount(userId)
+     
+      res.render('users/myaccount',{user:true,usersPro})
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+
+    
+   },
+   viewAllproducts:async(req,res,next)=>
+   {
+    try
     {
       
-      res.render('users/forgotpass',{user:false,passchange:true})
-    })
-   },
-   viewAccount:(req,res,next)=>
-   {
-    let userId=req.session.user_id
-    userHelper.editAccount(userId)
-    res.render('users/myaccount',{user:true})
-   }
+      let Pageno=req.query.page||1
+      console.log(Pageno,'page');
+      let pageNum=parseInt(Pageno)
+
+      products = await getAllproducts()
+      let TotalProducts=products.length
+      console.log(TotalProducts,'ggff');
+      let lmt=8
+      let Pages=[]
+      for(let i=1;i<=Math.ceil(TotalProducts/lmt);i++){
+        Pages.push(i)
+      }
+      console.log(Pages,'pages');
+       let Products=await TotalProductView(pageNum,lmt)
+        res.render('users/allproducts',{Products,Pages})
+      
+
+  }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+
+
    
+    
+   },
+   accountPost:async(req,res,next)=>
+   {
+    try
+    {
+      let userId=req.body._id
+      console.log(req.body,'editdetails');
+      
+          let usersPro=await editAccount(userId)
+          accountEdit(req.body,userId).then((response)=>
+          {
+            if(response.status)
+            {
+              res.render('users/myaccount',{usersPro,user:true,save:true})
+            }
+            else{
+              res.render('users/myaccount',{usersPro,user:true,errorMsg:true})
+            }
+          })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+
+
+  
+   },
+  //  viewAddress:(req,res,next)=>
+  //  {
+  //   try{
+  //    res.render('users/selectAdresses',{user:true})
+  //   }
+  //   catch(error)
+  //   {
+  //       res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+  //   }
+
+    
+   //},
+   addressAdd:(req,res,next)=>
+   {
+    try
+    {
+      res.render('users/addAddress',{user:true})
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+
+   },
+   newAddaddr:(req,res,next)=>
+   {
+    try{
+      let userId=req.session.user._id
+      console.log(req.body,userId);
+      addressSubmit(req.body,userId).then((response)=>
+      {
+        res.json({status:true})
+      })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+
+
+   },
+   addressChange:async(req,res,next)=>
+   {
+    try{
+      let userId=req.session.user._id
+      let Address=await allAddresses(userId)
+      console.log(Address,'bbbcch');
+        res.render('users/selectAdresses',{user:true,Address})
+      
+      
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+  },
+  changeDefault:(req,res,next)=>
+  {
+    try
+    {
+      console.log(req.session.user,'session');
+      let userId=req.session.user._id
+   
+      let adId=req.params.id
+      console.log(userId,adId,'new');
+      chngeDefault(adId,userId).then((response)=>
+      {
+        res.json({status:true})
+      })
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+   
+  },
+  SearchData:(req,res,next)=>
+  {
+    try
+    {
+      let data=req.query.search
+       SrchPro(data).then((SrchItem)=>
+       {
+        res.render('users/searchproductlist',{user:true,SrchItem})
+        
+       }).catch(()=>
+       {
+      
+        res.render('searchnot');
+            
+       })
+      // const Pro=SearchProduct(req.bod)
+      
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+  },
+  couponAdd:async(req,res,next)=>
+  {
+    try
+    {
+      let Coupon=req.body
+      console.log(Coupon,'hgfff');
+      let Total=await getTotal(req.session.user._id)
+      console.log(Total,'ttle');
+       checkCoupon(Coupon,Total[0].total).then((response)=>
+      {
+        console.log(response,'undo coupon');
+        res.json(response)
+      })
+     
+    }
+    catch(error)
+    {
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+ },
+ returnProducts:(req,res,next)=>
+ {
+  let ID=req.params.id
+  returnOrder(ID).then((response)=>{
+    res.redirect('/orderlist')
+  })
+ },
+ verifyRazorpay:async(req,res)=>{
+  try {
+     let orderid = req.body['order[orderid]']
+    req.session.orderID = orderid
+    console.log(req.body);
+       let signature = req.body['payment[razorpay_signature]']
+       signature.trim()
+      let hmac = crypto.createHmac('sha256',process.env.KeySecret)
+      hmac.update(req.body['payment[razorpay_order_id]']+"|"+req.body['payment[razorpay_payment_id]'],process.env.KeySecret)
+      hmac = hmac.digest('hex')
+      hmac.trim()
+        
+      console.log(signature ==hmac);
+      if(signature ==hmac){
+          
+          verifyPaymentRazorpay(orderid).then((response)=>{
+              
+              res.json({status:true})
+          })
+      }else{
+          
+          res.json({status:false})
+         
+      }
+  } catch (error) {
+  res.render('error', { message: error.message, code: 500, layout: 'error-layout' });  
+  }
+},
+
+ 
   }
   
 

@@ -3,28 +3,7 @@
         <header class="header header-8">
             <div class="header-top">
                 <div class="container">
-                    <div class="header-left">
-                        <div class="header-dropdown">
-                            <a href="#">USD</a>
-                            <div class="header-menu">
-                                <ul>
-                                    <li><a href="#">Eur</a></li>
-                                    <li><a href="#">Usd</a></li>
-                                </ul>
-                            </div><!-- End .header-menu -->
-                        </div><!-- End .header-dropdown -->
-
-                        <div class="header-dropdown">
-                            <a href="#">Eng</a>
-                            <div class="header-menu">
-                                <ul>
-                                    <li><a href="#">English</a></li>
-                                    <li><a href="#">French</a></li>
-                                    <li><a href="#">Spanish</a></li>
-                                </ul>
-                            </div><!-- End .header-menu -->
-                        </div><!-- End .header-dropdown -->
-                    </div><!-- End .header-left -->
+                   
 
                     <div class="header-right">
                         <ul class="top-menu">
@@ -32,9 +11,9 @@
                                 <a href="#">Links</a>
                                 <ul>
                                     <li><a href="tel:#"><i class="icon-phone"></i>Call: 8848668843</a></li>
-                                    <li><a href="wishlist.html"><i class="icon-heart-o"></i>My Wishlist <span>(3)</span></a></li>
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="contact.html">Contact Us</a></li>
+                                    <!-- <li><a href="wishlist.html"><i class="icon-heart-o"></i>My Wishlist <span>(3)</span></a></li> -->
+                                    <li><a href="/">About Us</a></li>
+                                    <li><a href="/">Contact Us</a></li>
                                     <% if(locals.user) {%>
                                 
                                     <li><a href="/logout">Logout</a></li>
@@ -64,53 +43,24 @@
 
                     <div class="header-right">
                         <nav class="main-nav">
+                            
+                            
+                
                             <ul class="menu sf-arrows">
-                                <li class="megamenu-container active">
-                                    <a href="/" class="sf-with-ul">Home</a>
+                                <img src="assets/images/demos/demo-2/logonew.png" style="width:100px;padding-bottom: 10px;">
+                                <li class="megamenu-container">
+                                  
+                                    <a href="/" class="">Home</a>
 
                                   
                                 </li>
                                 <li>
-                                    <a href="/view-product" class="sf-with-ul">Shop</a>
+                                    <a href="/view-product" class="">Shop</a>
 
-                                    <div class="megamenu megamenu-md">
-                                        <div class="row no-gutters">
-                                            <div class="col-md-8">
-                                                <div class="menu-col">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="menu-title">Shop with sidebar</div><!-- End .menu-title -->
-                                                            <ul>
-                                                                <li><a href="category-list.html">Shop List</a></li>
-                                                                <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
-                                                                <li><a href="category.html">Shop Grid 3 Columns</a></li>
-                                                                <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
-                                                                <li><a href="category-market.html"><span>Shop Market<span class="tip tip-new">New</span></span></a></li>
-                                                            </ul>
-
-                                                        </div><!-- End .col-md-6 -->
-
-                                                        
-                                                    </div><!-- End .row -->
-                                                </div><!-- End .menu-col -->
-                                            </div><!-- End .col-md-8 -->
-
-                                            <div class="col-md-4">
-                                                <div class="banner banner-overlay">
-                                                    <a href="category.html" class="banner banner-menu">
-                                                        <img src="assets/images/menu/banner-1.jpg" alt="Banner">
-
-                                                        <div class="banner-content banner-content-top">
-                                                            <div class="banner-title text-white">Last <br>Chance<br><span><strong>Sale</strong></span></div><!-- End .banner-title -->
-                                                        </div><!-- End .banner-content -->
-                                                    </a>
-                                                </div><!-- End .banner banner-overlay -->
-                                            </div><!-- End .col-md-4 -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .megamenu megamenu-md -->
+                                    
                                 </li>
                                 <li>
-                                    <a href="/" class="sf-with-ul">Product</a>
+                                    <a href="/" class="">Product</a>
 
                                     
                                 </li>
@@ -123,7 +73,7 @@
                                         <li><a href="/myaccount"><b>>Profile</b> </a></li>
                                         <li><a href="/orderlist"> <b>>Orders </b>  </a></li>
                                         <%} else {%>
-                                            <a href="/login" class="sf-with-ul "><b>Guest</b></a>
+                                            <a href="/login" class=" "><b>Guest</b></a>
                                             <%}%>
                                             
                                        
@@ -153,15 +103,15 @@
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
 
-                        <div class="header-search">
-                            <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
-                            <form action="#" method="get">
-                                <div class="header-search-wrapper">
-                                    <label for="q" class="sr-only">Search</label>
-                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
-                                </div><!-- End .header-search-wrapper -->
+                        <div class="d-flex align-items-center">
+                            <form class="form-inline" action="/productSrch/?search" method="get">
+                                <div class="d-flex">
+                                <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search"
+                                    aria-label="search">
+                                <button class="btn btn-outline-success btn-sm my-2 my-sm-0 ms-2" type="submit">Search</button>
+                                </div>
                             </form>
-                        </div><!-- End .header-search -->
+                        </div>
                         
                         <div class="dropdown cart-dropdown">
                             <a href="/cart" class="dropdown-toggle">

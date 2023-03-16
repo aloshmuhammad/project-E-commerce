@@ -1,0 +1,51 @@
+<section>
+    <div class="row">
+        
+        <%Address.forEach(address=>{%>
+        <div class="col-lg-6">
+            <div class="card card-dashboard">
+               
+                <div class="card-body">
+                    
+                    <h3 class="card-title">Address</h3><!-- End .card-title -->
+    
+                    <p><%=address.Addresses.firstName%><br>
+                
+                    
+                    <%=address.Addresses.address%><br>
+                    <%=address.Addresses.mobile%>                      <br>
+                    <%=address.Addresses.mobile%><br>
+                   <button class=" btn-change" onclick="changeAddress('<%=address.Addresses.AddreessID%>')">Add</button>
+                </div><!-- End .card-body -->
+             
+            </div><!-- End .card-dashboard -->
+         
+        </div><!-- End .col-lg-6 -->
+        <%})%>
+        </div>
+    
+</section>
+<script>
+     function changeAddress(addId)
+    {
+        console.log(addId);
+        $.ajax({
+            url:'/change-Addressorder/'+addId,
+            method:'get',
+            success:(response)=>
+            {
+                if(response.status)
+                {
+                    alert('Address Changed Succesfully')
+                    window.location.href="/order-payment"
+                }
+                else
+                {
+                    alert('There is no Orders Available Please Order FIrst')
+                    window.location.href='/'
+                }
+            }
+
+        })
+    }
+</script>

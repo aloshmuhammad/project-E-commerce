@@ -1,44 +1,61 @@
 var express = require('express');
 const userController = require('../controller/usercontroller');
-var userHelper=require('../helpers/Userhelpers')
+var userHelper=require('../Model/helpers/Userhelpers')
 var router = express.Router();
 const accountSid = "AC8ac2c6332729c28573b0c0039258a15f";
 const authToken = '00d0c3b74aa62dedf3b6043c5068c362';
 const verifySid = 'VA64162928165b69fa61d327c24f6f5fe7 ';
 const client = require("twilio")(accountSid, authToken);
 const auth=require('../controller/auth')
+const{verifyUser} =auth
+const{homePage,signIn,signUp,logoutUser,signupPost,signinPost,otpLogin,otpPost,otpValid,validateOtp,productPage,cart,addCart,changeQuantity,removeProduct,orderProduct,placeorderPost,successPage,ordersList,vieworderProducts,cancelOrder,otpLoginps,otpPass,otPv,vlidChck,passChck,checkPass,viewAccount,accountPost,viewAllproducts,addressAdd,newAddaddr,addressChange,changeDefault,paypalSucces,SearchData,couponAdd,returnProducts,verifyRazorpay}=userController
+
 
 /* GET users listing. */
-router.get('/', userController.homePage);
-router.get('/login', userController.signin)
-router.get('/signup',userController.signup)
-router.get('/logout',userController.logoutuser)
+router.get('/', homePage);
+router.get('/login',signIn)
+router.get('/signup',signUp)
+router.get('/logout',logoutUser)
 // router.post('/login',(req,res,next)=>
 /
-router.post('/signup',userController.signuppost)
-router.post('/login',userController.signinpost)
-router.get('/otp-login',userController.otplogin)
-router.post('/otp-login',userController.otppost)
-router.get('/otp-validate',userController.otpvalid)
-router.post('/validate-otp',userController.validateOtp)
-router.get('/view-product/:id',auth.verifyuser,userController.productPage)
-router.get('/cart',auth.verifyuser, userController.cart)
-router.get('/addto-cart/:id',userController.addCart)
-router.post('/change-product-quantity',userController.changeQuantity)
-router.post('/remove-from-cart',userController.removeProduct)
-router.get('/order-payment',auth.verifyuser,userController.orderProduct)
-router.post('/placeorder-submit',userController.placeorderPost)
-router.get('/ordersuccess',auth.verifyuser,userController.successPage)
-router.get('/orderlist',auth.verifyuser,userController.ordersList)
-router.get('/orderdetails/:id',auth.verifyuser,userController.vieworderproducts)
-router.post('/cancel-order',userController.cancelOrder)
-router.get('/otploginpass',userController.otploginps)
-router.post('/otploginpasss',userController.otppass)
-router.get('/otpvalidps',userController.otpv)
-router.post('/validateotppass',userController.vlidchck)
-router.get('/passcheck',userController.passchck)
-router.post('/validate-pass',userController.checkpass)
-router.get('/myaccount',auth.verifyuser,userController.viewAccount)
+router.post('/signup',signupPost)
+router.post('/login',signinPost)
+router.get('/otp-login',otpLogin)
+router.post('/otp-login',otpPost)
+router.get('/otp-validate',otpValid)
+router.post('/validate-otp',validateOtp)
+router.get('/view-product/:id',verifyUser,productPage)
+router.get('/cart',verifyUser, cart)
+router.get('/addto-cart/:id',verifyUser,addCart)
+router.post('/change-product-quantity',changeQuantity)
+router.delete('/remove-from-cart',verifyUser,removeProduct)
+router.get('/order-payment',verifyUser,orderProduct)
+router.post('/placeorder-submit',placeorderPost)
+router.get('/ordersuccess',verifyUser,successPage)
+router.get('/orderlist',verifyUser,ordersList)
+router.get('/orderdetails/:id',verifyUser,vieworderProducts)
+router.get('/orderReturn/:id',verifyUser,returnProducts)
+router.post('/cancel-order',cancelOrder)
+router.get('/otploginpass',verifyUser,otpLoginps)
+router.post('/otploginpasss',otpPass)
+router.get('/otpvalidps',verifyUser,otPv)
+router.post('/validateotppass',verifyUser,vlidChck)
+router.get('/passcheck',verifyUser,passChck)
+router.post('/validate-pass',checkPass)
+router.get('/myaccount',verifyUser,viewAccount)
+router.post('/account-details',verifyUser,accountPost)
+
+router.get('/allproducts',verifyUser,viewAllproducts)
+ router.get('/addreses',verifyUser,addressChange)
+router.get('/addAddress',verifyUser,addressAdd)
+router.post('/address-Submit',verifyUser,newAddaddr)
+router.get('/change-Addressorder/:id',verifyUser,changeDefault)
+router.get('/successPayment',verifyUser,paypalSucces)
+router.get('/productSrch',verifyUser,SearchData)
+router.post('/add-Coupon',verifyUser,couponAdd)
+router.post('/verifyRazorpay',verifyRazorpay)
+
+
 
 
 

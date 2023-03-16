@@ -1,0 +1,87 @@
+<!-- <style>
+    @media (min-width: 1025px) {
+        .h-custom {
+        height: 100vh !important;
+        }
+        }
+      </style> -->
+<section class="h-100 h-custom" style="background-color: #8fc4b7;">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-lg-8 col-xl-6">
+          <div class="card rounded-3">
+            
+            <div class="card-body p-4 p-md-5">
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Add Coupon</h3>
+  
+              <form class="px-md-2" method="post" action="/admin/add-coupon">
+  
+                <div class="form-outline mb-4">
+                  <input type="text" name="couponid" id="form3Example1q" class="form-control" style="border:solid;"  />
+                  <label class="form-label" for="form3Example1q" style="color: black;">Coupon ID</label>
+                </div>
+  
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+  
+                    <div class="form-outline datepicker">
+                      <input type="date" class="form-control" name="date" id="exampleDatepicker1" style="border:solid;" />
+                      <label for="exampleDatepicker1" class="form-label" style="color: black;">Expiry Date</label>
+                    </div>
+  
+                  </div>
+                  
+                </div>
+  
+               
+  
+                <div class="row mb-4 pb-2 pb-md-0 mb-md-5">
+                  <div class="col-md-6">
+  
+                    <div class="form-outline">
+                      <input type="decimal" id="form3Example1w" name="offerpercentage" class="form-control" style="border:solid;"  />
+                      <label class="form-label" for="form3Example1w" style="color: black;">Offer Percentage</label>
+                    </div>
+  
+                  </div>
+                </div>
+                <div class="row mb-4 pb-2 pb-md-0 mb-md-5">
+                    <div class="col-md-6">
+    
+                      <div class="form-outline">
+                        <input type="decimal" id="form3Example1w" name="reducedmaxamount"class="form-control" style="border:solid;" />
+                        <label class="form-label" for="form3Example1w" style="color: black;">Maximum Amount in Reduction </label>
+                      </div>
+    
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+    
+                      <div class="form-outline datepicker">
+                        <input type="decimal" class="form-control" name="minprice" id="exampleDatepicker1" style="border:solid;" />
+                        <label for="exampleDatepicker1" class="form-label" style="color: black;">Minimum Valid Price</label>
+                      </div>
+    
+                    </div>
+                    
+                  </div>
+              
+  
+                <button type="submit" class="btn btn-success btn-lg mb-1">Submit</button>
+  
+              </form>
+              <%if(locals.cpn){ %>
+              
+                <p>Coupon Added Successfully</p>
+                <%}%>
+              
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  

@@ -8,32 +8,53 @@
         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
             <div class="form-check d-inline-block">
                 <form action="#" class="d-flex text align-items-center" id="status-change">
-                    <div class="form-check ml-20 ">
-                    
-                        <input type="hidden"   name='orderid' value="<%=orders._id%>" >
-                        <input type="radio" class="form-check-input" id="radio1" name="status" value="Cancelled" checked>cancel-order
-                        <label class="form-check-label" for="radio1"></label>
-                    </div>
+                    <input  type="hidden"   name='orderid' value="<%=orders._id%>" >
+                    <%if(orders.status=='Cancelled'){%>
+                        <div class="ml-10">
+                            <button class="btn btn-primary btn-sm btn-block disabled">Cancelled</button>
+                          </div>
+                    <%}else if(orders.status=='placed'){%>
     
                       
-                      <div class="form-check  ">
+                      <div id="deliver-order" class="form-check  ">
                         <input type="radio" class="form-check-input" id="radio2" name="status" value="Delivered">Delivered
                         <label class="form-check-label" for="radio2"></label>
                       </div>
                       
-                      <div class="form-check ">
+                      <div id= "pending-order"class="form-check ">
                         <input type="radio" class="form-check-input"name="status" value="Pending" >Pending
                         <label class="form-check-label"></label>
                     </div>
                       
-                    <div class="form-check  ">
-                        <input type="radio" class="form-check-input" id="radio1" name="status" value="Placed" >Placed
+                    <div id="placed-order" class="form-check  ">
+                        <input type="radio" class="form-check-input" id="radio1" name="status" value="Cancelled" >Cancel-Order
                         <label class="form-check-label" for="radio1"></label>
                       </div>
-                    
                       <div class="ml-10">
-                      <button class="btn btn-primary btn-sm btn-block" type="submit">Change Status</button>
+                        <button class="btn btn-primary btn-sm btn-block" type="submit">Change Status</button>
+                      </div>
+                      <%}else if(orders.status=='Delivered'){%>
+
+                    <div class="ml-10">
+                      <button class="btn btn-primary btn-sm btn-block disabled">Delivered</button>
                     </div>
+                <%}else {%>
+                    <div id="deliver-order" class="form-check  ">
+                        <input type="radio" class="form-check-input" id="radio2" name="status" value="Delivered">Delivered
+                        <label class="form-check-label" for="radio2"></label>
+                      </div>
+                      <div id="placed-order" class="form-check  ">
+                        <input type="radio" class="form-check-input" id="radio1" name="status" value="Cancelled" >Cancel-Order
+                        <label class="form-check-label" for="radio1"></label>
+                      </div>
+                      <div class="ml-10">
+                        <button class="btn btn-primary btn-sm btn-block" type="submit">Change Status</button>
+                      </div>
+                      <%}%>
+
+            
+
+                      
                     
                 </form>
                 
@@ -129,34 +150,30 @@
                                     </td>
                                     <td> <%=order.product.price%></td>
                                     <td> <%=order.quantity%> </td>
-                                    <td class="text-end"> <%=orders.totalAmount%> </td>
-                                </tr>
+                                   
                                 
                                   
                               
-                               
-                                <tr>
+                                <%})%>
+                                
                                     <td colspan="4">
                                         <article class="float-end">
                                             
-                                            <dl class="dlist">
-                                                <dt>Shipping cost:</dt>
-                                                <dd>0</dd>
-                                            </dl>
+                                           
                                             <dl class="dlist">
                                                 <dt>Grand total:</dt>
-                                                <dd> <b class="h5"><%=orders.totalAmount%></b> </dd>
+                                                <dd style="color: black;"> <b class="h5"><%=orders.totalAmount%></b> </dd>
                                             </dl>
                                             <dl class="dlist">
-                                              <span id="order-status"><dt class="text-muted">Status:<%=orders.status%></dt></span>  
+                                                <dt class="text-muted" style="color: black;">  <span id="order-status">Status:<%=orders.status%></span>  </dt>
                                                 <dd>
                                                    
                                                 </dd>
                                             </dl>
                                         </article>
                                     </td>
-                                </tr>
-                                <%})%>
+                                
+                               
                             </tbody>
                         </table>
                     </div> <!-- table-responsive// -->
@@ -193,11 +210,38 @@
             data:$('#status-change').serialize(),
             success:(response)=>
             {
-             alert('Status Successfully Changed')
-             resolve(response)
+             
+             
               if(response.status)
               { 
+                document.getElementById('order-status').innerHTML = response.newStatus
+                // if(response.newStatus=='Cancelled')
+                // {
+                //     $('#deliver-order').addClass('d-none')
+                //     $('#pending-order').addClass('d-none')
+                //     $('#placed-order').addClass('d-none')
+                // }
                 
+                   
+                    
+                   
+                
+                // else if(response.newStatus=='Delivered')
+                // {
+                //     $('#placed-order').addClass('d-none')
+                //     $('#pending-order').addClass('d-none')
+                //     $('#cancel-order').addClass('d-none')
+                // }
+                // else if(response.newStatus=='Pending')
+                // {
+                  
+                //     $('#placed-order').addClass('d-none')
+                    
+                // }
+
+
+               
+                alert('Status Successfully Changed')
                location.reload()
               }
             

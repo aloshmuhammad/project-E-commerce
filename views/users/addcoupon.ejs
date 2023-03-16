@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+<script type="text/javascript" language="javascript">
+   $(document).ready(function() {
+     $("#myModal").modal('show');
+   });
+   </script>   
+<style>
+.modal-header {
+    background-color: #D9534F;
+    padding:9px 15px;
+    color:#FFF;
+    font-family:Verdana, sans-serif;
+    border-bottom:1px solid #eee;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+ }
+ .modal-body {
+    background-color: #FF7171;
+    padding:9px 15px;
+    color:#000;
+    font-family:Verdana, sans-serif;
+    border-bottom:4px solid #C49F0F;
+
+ }
+.modal-footer {
+    background-color: #FAEDBC;
+    color:#FFF;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+ } 
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Coupon </h1>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#myModal">
+  Add Coupon
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal with multiple buttons</h4>
+      </div>
+      <div class="modal-body">
+
+      <form role="form">
+      <!-- <div class="form-group">
+        <label for="exampleInputEmail1">Your Name</label>
+        <input type="name" class="form-control" id="name" placeholder="Name">
+      </div> -->
+      <div class="form-group">
+        <label for="exampleInputEmail1">Enter Coupon ID</label>
+        <input type="text" class="form-control" id="email1" >
+      </div>      
+    </form>
+    </div>    
+      <div class="modal-footer">
+        <button type="button" class="btn btn btn-warning" data-dismiss="modal">Apply</button>
+  
+      </div>
+    </div>
+  </div>
+</div>
+ 
+</body>
+ 
+</html>

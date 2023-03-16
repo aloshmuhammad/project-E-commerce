@@ -40,13 +40,13 @@
 
                                             <h3 class="product-title">
                                                 
-                                                <a href="#"><%=order.product.title%></a>
+                                                <a href="#"  style="color: black;"><%=order.product.title%></a>
                                             </h3><!-- End .product-title -->
                                         </div><!-- End .product -->
                                     </td>
-                                    <td class="price-col"> <%=order.product.price%></td>
-                                    <td class="price-col"> <%=order.product.color%></td>
-                                    <td class="price-col"> <%=order.quantity%></td>
+                                    <td class="price-col" style="color: black;"> <%=order.product.price%></td>
+                                    <td class="price-col" style="color: black;"> <%=order.product.color%></td>
+                                    <td class="price-col"style="color: black;"> <%=order.quantity%></td>
                                     
            
          
@@ -76,7 +76,13 @@
                         <div class="summary summary-cart ">
 	                				
 
-	                				<a href="" class="btn btn-outline-primary-2 btn-order btn-block"onclick="cancelorder('<%=orderedproducts._id%>')">Cancel Order</a>
+	                				<a href="" class="btn btn-outline-primary-2 btn-order btn-block"onclick="cancelorder('<%=orderedproducts[0]._id%>')">Cancel Order</a>
+                                     <%if(locals.diffDays<=7 ){%>
+                                    
+                        
+                                    <a href="/orderReturn/<%=orderedproducts[0]._id%>" class="btn btn-outline-primary-2 btn-order btn-block">Return Order</a>
+                                  <%}%>
+                                       
 	                			</div><!-- End .summary -->
                            
                        
@@ -101,8 +107,9 @@
             method:'post',
             success:(response)=>
             {
-                resolve(response)
-                if(response.cancelorder)
+                
+                console.log(response);
+                if(response.cancelItem)
                 {
                     alert('Order Cancelled Please Continue Shopping')
                     location.reload()
