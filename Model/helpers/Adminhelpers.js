@@ -52,12 +52,12 @@ blockUser:(userid)=>
    
         return new Promise(async(resolve,reject)=>
         {
-            console.log(userid)
+            
             await db.get().collection(collection.USERCOLLECTION).updateOne({_id:objectId(userid)},
             {$set:{
                 status:false}}).then((response)=>
             {
-                console.log(response);
+                
             resolve()
             })
         })
@@ -72,12 +72,12 @@ unblockUser:(userid)=>
 
         return new Promise(async(resolve,reject)=>
         {
-            console.log(userid)
+      
             await db.get().collection(collection.USERCOLLECTION).updateOne({_id:objectId(userid)},
             {$set:{
                 status:true}}).then((response)=>
             {
-                console.log(response);
+                
             resolve()
             })
         })
@@ -159,7 +159,7 @@ getCategory:(userid)=>
 editcategoryp:(data)=>
 { 
  
-    console.log(data);
+   
     return new Promise(async(resolve,reject)=>
     {
      await db.get().collection(collection.CATEGORYCOLLECTION).updateOne({_id:objectId(data.id)},
@@ -341,7 +341,7 @@ vieworderedproducts:(orderid)=>
             
        
         ]).toArray()
-       console.log(adminorderItems,'bbbb');
+      
             resolve(adminorderItems)
         
        
@@ -374,8 +374,7 @@ statusPin:(data)=>
 { 
     
         let orderid=data.orderid
-        console.log(orderid,'cv');
-        console.log(data,'data');
+        
         
             
             return new Promise(async(resolve,reject)=>
@@ -388,7 +387,7 @@ statusPin:(data)=>
                                    DeliveredDate:new Date()
                             }
                         }).then((response)=>
-                        { console.log(response,'rsp');
+                        { 
                             response.newStatus = data.status
                             response.status =true
                             resolve(response)
@@ -399,7 +398,7 @@ statusPin:(data)=>
                                status:data.status
                         }
                     }).then((response)=>
-                    { console.log(response,'rsp');
+                    { 
                         response.newStatus = data.status
                         response.status =true
                         resolve(response)
@@ -465,7 +464,7 @@ getAllCoupons:()=>
 },
 deleteCoupons:(Id)=>
 {
-    console.log(Id,'hp');
+   
     return new Promise(async(resolve,reject)=>
     {
         await db.get().collection(collection.COUPONCOLLECTION).deleteOne({_id:objectId(Id)}).then((response)=>
