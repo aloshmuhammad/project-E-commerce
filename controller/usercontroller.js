@@ -1,8 +1,8 @@
 const { Db, ObjectId } = require('mongodb');
 const { getAllUsers } = require('../Model/helpers/Adminhelpers');
-const Adminhelpers = require('../Model/helpers/Adminhelpers');
+
 var userHelper=require('../Model/helpers/Userhelpers');
-const router = require('../routes/users');
+
 const paypal=require('paypal-rest-sdk')
 const Razorpay = require('razorpay');
 const crypto = require('crypto')

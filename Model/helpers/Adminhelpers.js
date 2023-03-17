@@ -2,7 +2,6 @@ var db=require('../connection')
 var collection=require('../collections')
 const bcrypt=require('bcrypt')
 const { LongWithoutOverridesClass } = require('bson')
-const {resolve, reject}= require('promise')
 var objectId=require('mongodb').ObjectId
 
 module.exports={

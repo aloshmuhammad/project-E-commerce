@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var adminController=require('../controller/admincontroller')
 const multer = require('multer')
-const path=require('path')
 const auth=require('../controller/auth')
 const{verifyAdmin}=auth
 
