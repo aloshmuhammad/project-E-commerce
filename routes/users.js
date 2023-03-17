@@ -2,10 +2,6 @@ var express = require('express');
 const userController = require('../controller/usercontroller');
 var userHelper=require('../Model/helpers/Userhelpers')
 var router = express.Router();
-
-
-
-c
 const auth=require('../controller/auth')
 const{verifyUser} =auth
 const{homePage,signIn,signUp,logoutUser,signupPost,signinPost,otpLogin,otpPost,otpValid,validateOtp,productPage,cart,addCart,changeQuantity,removeProduct,orderProduct,placeorderPost,successPage,ordersList,vieworderProducts,cancelOrder,otpLoginps,otpPass,otPv,vlidChck,passChck,checkPass,viewAccount,accountPost,viewAllproducts,addressAdd,newAddaddr,addressChange,changeDefault,paypalSucces,SearchData,couponAdd,returnProducts,verifyRazorpay}=userController
