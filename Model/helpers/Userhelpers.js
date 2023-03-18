@@ -1,7 +1,7 @@
 var db=require('../connection')
 var collection=require('../collections')
 const bcrypt=require('bcrypt');
-const { resolve } = require('path');
+
 const { response } = require('../../app');
 var moment = require('moment'); // require
 var objectId=require('mongodb').ObjectId

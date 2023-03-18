@@ -1,7 +1,6 @@
 var db=require('../connection')
 var collection=require('../collections')
-const bcrypt=require('bcrypt')
-const { LongWithoutOverridesClass } = require('bson')
+
 var objectId=require('mongodb').ObjectId
 
 module.exports={
