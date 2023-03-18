@@ -399,8 +399,8 @@ signIn:(req,res,next)=>
             "payment_method": "paypal"
           },
           "redirect_urls": {
-            "return_url": "http://localhost:3000/successPayment",
-            "cancel_url": "http://localhost:3000/cancel"
+            "return_url": "https://betterbuy.cloud",
+            "cancel_url": "http://betterbuy.cloud/cancel"
           },
           "transactions": [{
             "item_list": {
@@ -719,7 +719,7 @@ signIn:(req,res,next)=>
       console.log(Pageno,'page');
       let pageNum=parseInt(Pageno)
 
-      products = await getAllproducts()
+      let products = await getAllproducts()
       let TotalProducts=products.length
       console.log(TotalProducts,'ggff');
       let lmt=8

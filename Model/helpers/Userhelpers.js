@@ -12,7 +12,7 @@ var instance = new Razorpay({
     key_secret: process.env.KeySecret
   });
 const client = require("twilio")(process.env.AccountSid, process.env.AuthToken);
-let mob;
+
 module.exports=
 {
 
@@ -1000,7 +1000,7 @@ accountEdit:(Data,userId)=>
     } ,
     checkCoupon:(Data,Total)=>
     { 
-        console.log(Data,'vaada');
+       
         
         return new Promise(async(resolve,reject)=>
         {
