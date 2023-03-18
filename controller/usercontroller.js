@@ -399,7 +399,7 @@ signIn:(req,res,next)=>
             "payment_method": "paypal"
           },
           "redirect_urls": {
-            "return_url": "https://betterbuy.cloud/ordergitsucess",
+            "return_url": "https://betterbuy.cloud/ordersuccess",
             "cancel_url": "http://betterbuy.cloud/cancel"
           },
           "transactions": [{
