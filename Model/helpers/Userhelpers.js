@@ -3,6 +3,7 @@ var collection=require('../collections')
 const bcrypt=require('bcrypt');
 const { resolve } = require('path');
 const { response } = require('../../app');
+var moment = require('moment'); // require
 var objectId=require('mongodb').ObjectId
 const Razorpay = require('razorpay');
 require('dotenv').config()
@@ -445,7 +446,7 @@ getTotal:(userid)=>
                     products:product,
                     totalAmount:order.totalPrice,
                     status:status,
-                    date:new Date()
+                    date: moment().format('MMMM Do YYYY, h:mm:ss a')
     
                 }
                 console.log(orderObj,'drop');
@@ -479,6 +480,8 @@ getTotal:(userid)=>
             return new Promise(async(resolve,reject)=>
             {
                 let order=await db.get().collection(collection.ORDERCOLLECTION).find({userId:objectId(userid)}).sort({date:-1}).toArray()
+                console.log(order,'chck');
+                
                 
                 resolve(order)
             })
@@ -995,7 +998,7 @@ accountEdit:(Data,userId)=>
                 reject()
             
            
-        
+      
         })
     } ,
     checkCoupon:(Data,Total)=>

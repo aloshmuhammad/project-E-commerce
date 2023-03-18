@@ -27,13 +27,13 @@
                                  
                                 
                                     
-                                    <th> <b> Ordered Date</b></th>
+                                    <th style="color: black; font-size: medium;"> <b> Ordered Date</b></th>
                                 
-                                    <th> <b> Order Price</b></th>
-                                    <th><b>Payment Method</b></th>
-                                    <th><b>status</b></th>
+                                    <th style="color: black;font-size: medium;"> <b> Order Price</b></th>
+                                    <th style="color: black;font-size: medium;"><b>Payment Method</b></th>
+                                    <th style="color: black;font-size: medium;"><b>Status</b></th>
                                     
-                                    <th class="text-center">Action</th>
+                                    <th class="text-center" style="color: black;font-size: medium;"><b>Action</b></th>
                                 </tr>
                             </thead>
                             <% orders.forEach(order=>{ %>
@@ -45,10 +45,10 @@
                                     
                                     
                                     
-                                    <td><%=order.date %></td>
-                                    <td>Rs.<%= order.totalAmount %></td>
-                                    <td><%= order.paymentmethod %></td>
-                                    <td><%= order.status %></td>
+                                    <td style="font-size: small;"><strong><%=order.date %></strong></td>
+                                    <td style="color: black;">Rs.<%= order.totalAmount %></td>
+                                    <td style="color: black;"><%= order.paymentmethod %></td>
+                                    <td style="color: brown;"><%= order.status %></td>
 
                                     <td class="text-center text">
                                         <a href="/orderdetails/<%=order._id%>" class="btn  btn-primary">View Order</a>

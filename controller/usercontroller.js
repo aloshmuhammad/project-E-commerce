@@ -285,6 +285,7 @@ signIn:(req,res,next)=>
    {
     try
     {
+      let name=req.session.user.firstName
 
       let Total=await getTotal(req.session.user._id)
     
@@ -295,7 +296,7 @@ signIn:(req,res,next)=>
       {
       req.session.cartItems=cartItems
         
-          res.render('users/cart',{user:true,login:true,cartItems,cartCount,Total})
+          res.render('users/cart',{user:true,login:true,cartItems,cartCount,name,Total})
           
        
         
@@ -400,7 +401,7 @@ signIn:(req,res,next)=>
           },
           "redirect_urls": {
             "return_url": "https://betterbuy.cloud/ordersuccess",
-            "cancel_url": "http://betterbuy.cloud/cancel"
+            "cancel_url": "https://betterbuy.cloud/cancel"
           },
           "transactions": [{
             "item_list": {
@@ -515,12 +516,13 @@ signIn:(req,res,next)=>
    {
     try
     {
+      let name=req.session.user.firstName
       userid=req.session.user._id
     
       let orders= await vieworders(userid)
      
    
-         res.render('users/orderlist',{orders,user:true})
+         res.render('users/orderlist',{orders,user:true,name})
         
     }
     catch(error)
@@ -538,6 +540,7 @@ signIn:(req,res,next)=>
     try
     {
       let orderedproducts=await vieworderedProducts(req.params.id)
+      let name=req.session.user.firstName
      
       console.log(orderedproducts[0],'oot');
        const date1 = new Date();
@@ -547,7 +550,7 @@ signIn:(req,res,next)=>
        console.log(diffTime + " milliseconds");
       console.log(diffDays + " days")
 
-      res.render('users/orderdetails',{orderedproducts,diffDays,user:true})
+      res.render('users/orderdetails',{orderedproducts,diffDays,user:true,name})
         
        
       }
@@ -714,7 +717,7 @@ signIn:(req,res,next)=>
    {
     try
     {
-      
+      let name=req.session.user.firstName
       let Pageno=req.query.page||1
       console.log(Pageno,'page');
       let pageNum=parseInt(Pageno)
@@ -729,7 +732,7 @@ signIn:(req,res,next)=>
       }
       console.log(Pages,'pages');
        let Products=await TotalProductView(pageNum,lmt)
-        res.render('users/allproducts',{Products,Pages})
+        res.render('users/allproducts',{Products,Pages,name})
       
 
   }
@@ -747,6 +750,7 @@ signIn:(req,res,next)=>
    {
     try
     {
+      let name=req.session.user.firstName
       let userId=req.body._id
       console.log(req.body,'editdetails');
       
@@ -755,10 +759,10 @@ signIn:(req,res,next)=>
           {
             if(response.status)
             {
-              res.render('users/myaccount',{usersPro,user:true,save:true})
+              res.render('users/myaccount',{usersPro,user:true,name,save:true})
             }
             else{
-              res.render('users/myaccount',{usersPro,user:true,errorMsg:true})
+              res.render('users/myaccount',{usersPro,user:true,name,errorMsg:true})
             }
           })
     }
@@ -787,7 +791,8 @@ signIn:(req,res,next)=>
    {
     try
     {
-      res.render('users/addAddress',{user:true})
+      let name=req.session.user.firstName
+      res.render('users/addAddress',{user:true,name})
     }
     catch(error)
     {
@@ -817,10 +822,11 @@ signIn:(req,res,next)=>
    addressChange:async(req,res,next)=>
    {
     try{
+      let name=req.session.user.firstName
       let userId=req.session.user._id
       let Address=await allAddresses(userId)
       console.log(Address,'bbbcch');
-        res.render('users/selectAdresses',{user:true,Address})
+        res.render('users/selectAdresses',{user:true,Address,name})
       
       
     }
@@ -854,10 +860,11 @@ signIn:(req,res,next)=>
   {
     try
     {
+      let name=req.session.user.firstName
       let data=req.query.search
        SrchPro(data).then((SrchItem)=>
        {
-        res.render('users/searchproductlist',{user:true,SrchItem})
+        res.render('users/searchproductlist',{user:true,name,SrchItem})
         
        }).catch(()=>
        {

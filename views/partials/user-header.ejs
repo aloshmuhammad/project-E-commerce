@@ -8,7 +8,7 @@
                     <div class="header-right">
                         <ul class="top-menu">
                             <li>
-                                <a href="#">Links</a>
+                                <a href="#"></a>
                                 <ul>
                                     <li><a href="tel:#"><i class="icon-phone"></i>Call: 8848668843</a></li>
                                     <!-- <li><a href="wishlist.html"><i class="icon-heart-o"></i>My Wishlist <span>(3)</span></a></li> -->
@@ -55,25 +55,25 @@
                                   
                                 </li>
                                 <li>
-                                    <a href="/view-product" class="">Shop</a>
+                                    <a href="/allproducts" class="">Shop</a>
 
                                     
                                 </li>
                                 <li>
-                                    <a href="/" class="">Product</a>
+                                    <a href="/allproducts" class="">Product</a>
 
                                     
                                 </li>
                                 
                                 <li>
                                     <%if(locals.user){%>
-                                    <a href="/myaccount" class="sf-with-ul "><b><%=locals.name%></b></a>
+                                    <a href="/myaccount" class="sf-with-ul "><strong><%=locals.name%></strong></a>
 
                                     <ul>
-                                        <li><a href="/myaccount"><b>>Profile</b> </a></li>
-                                        <li><a href="/orderlist"> <b>>Orders </b>  </a></li>
+                                        <li><a href="/myaccount"><b>Profile</b> </a></li>
+                                        <li><a href="/orderlist"> <b>Orders </b>  </a></li>
                                         <%} else {%>
-                                            <a href="/login" class=" "><b>Guest</b></a>
+                                            <a href="/login"><b>Guest</b></a>
                                             <%}%>
                                             
                                        
