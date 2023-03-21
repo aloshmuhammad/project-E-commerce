@@ -1,6 +1,6 @@
 const layout='./admin/adminlayout'
 var adminHelper=require('../Model/helpers/Adminhelpers')
-const {adminLOgin,getAllUsers,blockUser,unblockUser,adminAddcat,getAllCategory,deleteCategory,getCategory,editcategoryp,addproduct,getAllproducts,deleteProducts,getproducts,editproductPost,getOrders,getOrdersad,vieworderedproducts,statusPin,adminSalesGraph,downloadReport, CouponAd,getAllCoupons,deleteCoupons}=adminHelper
+const {adminLOgin,getAllUsers,blockUser,unblockUser,adminAddcat,getAllCategory,deleteCategory,getCategory,editcategoryp,addproduct,getAllproducts,deleteProducts,getproducts,editproductPost,getOrders,getOrdersad,vieworderedproducts,statusPin,adminSalesGraph,downloadReport, CouponAd,getAllCoupons,deleteCoupons,TotalOrders}=adminHelper
 
 module.exports=
 {
@@ -21,7 +21,7 @@ module.exports=
             if(req.session.loggedInad)
             {
                 adminSalesGraph().then((Data)=>
-                { console.log(Data.DeliveredCount,'ljh');
+                { 
                 
                 
                     res.render('admin/indexad',{layout,adin:true,Data})
@@ -43,7 +43,7 @@ module.exports=
         try{
             adminLOgin(req.body).then((response)=>
             {  
-                let admina=response.status;
+                let admina = response.status;
             
                 if(admina)
                 {   req.session.loggedInad=true
@@ -55,7 +55,7 @@ module.exports=
                     res.redirect('/admin')
                 }
             }).catch(error=>{
-                console.log(error,"sadf")
+                
                 res.status(500).send(error.message)
               })
         }
@@ -74,7 +74,7 @@ module.exports=
         
       res.render('admin/viewusers',{layout,adin:true,users});
         }).catch(error=>{
-            console.log(error,"sadf")
+            
             res.status(500).send(error.message)
           })
             
@@ -92,20 +92,21 @@ module.exports=
 
 },
 
+
 blockUser:(req,res,next)=>
 {
     try{
         if(req.session.loggedInad)
         {
-        let userid=req.params.id
-        console.log(userid);
+        const userid = req.params.id
+       
         blockUser(userid).then((response)=>
         {
         
             res.redirect('/admin/viewusers')
         
         }).catch(error=>{
-            console.log(error,"sadf")
+            
             res.status(500).send(error.message)
           })
     }
@@ -123,15 +124,15 @@ unblockUser:(req,res,next)=>
 {
     
     try{
-        let userid=req.params.id
-        console.log(userid);
+        const userid = req.params.id
+       
         unblockUser(userid).then((response)=>
         {
         
             res.redirect('/admin/viewusers')
         
         }). catch(error=>{
-            console.log(error,"sadf")
+           
             res.status(500).send(error.message)
           })
     }
@@ -163,7 +164,7 @@ addCategory:(req,res,next)=>
     try {
         adminAddcat(req.body).then((category)=>
         {
-        let oldcat = category.status
+        const oldcat = category.status
         if(oldcat)
         { 
             res.render('admin/view-category',{layout,olduser,adminin:true})
@@ -174,7 +175,7 @@ addCategory:(req,res,next)=>
         
         }
         }).catch(error=>{
-            console.log(error,"sadf")
+           
             res.status(500).send(error.message)
           })
           
@@ -214,8 +215,8 @@ deleteCategory:(req,res,next)=>
 {
     
     try{
-        let userid=req.params.id
-        console.log(userid);
+        const userid = req.params.id
+       
         deleteCategory(userid).then((response)=>
         {
         
@@ -233,7 +234,7 @@ deleteCategory:(req,res,next)=>
 },
 editCategory:(req,res,next)=>
 {
-    let userid=req.params.id
+    const userid = req.params.id
     try{
         getCategory(userid).then((category)=>
         {
@@ -251,7 +252,7 @@ editCategory:(req,res,next)=>
     },
  editcategoryPost:(req,res,next)=>
  {
-    console.log(req.body);
+    
     try
     {
    
@@ -289,7 +290,8 @@ editCategory:(req,res,next)=>
  { 
     try
     {
-        const files=req.files
+    const files=req.files
+      
     const filename=files.map((file)=>
     {
         return file.filename
@@ -319,10 +321,7 @@ catch(error)
     try{
         getAllproducts().then((products)=>
         {  
-            // console.log(products[0]);
-           // products.forEach(element => {
-            
-           // });
+          
               res.render('admin/product-list',{layout,adin:true,products})
         })
     }
@@ -340,8 +339,8 @@ catch(error)
  deleteProduct:(req,res,next)=>
  {
  try{
-    let productid=req.params.id
-    console.log(productid);
+    const productid=req.params.id
+    
     deleteProducts(productid).then((response)=>
     {
     
@@ -361,7 +360,7 @@ catch(error)
  editProducts:(req,res,next)=>
  { 
     try{
-    let productid=req.params.id
+    const productid = req.params.id
     
     getproducts(productid).then((products)=>
     {
@@ -387,33 +386,11 @@ catch(error)
  },
  editProductpost:(req,res,next)=>
  {
-    console.log(req.files,'file')
-    console.log(req.body,'body');
+   
 try{
-    let data =req.body
-    let images=req.files
-    // let img0 =""
-    // let img1=""
-    // let img2=""
-    // let img3=""
-    
-    
-    // req.files.img1?img1=req.files.img1[0].filename:
-    // req.files.img2?img2=req.files.img2[0].filename:
-    // req.files.img0?img3=req.files.img3[0].filename:
-    // data={
-    //     title:req.body.title,
-    //     color:data.color,
-    //     size:data.size,
-    //     brand:data.brand,
-    //     price:data.price,
-    //     description:data.description,
-    //     category:data.category,
-    //     stock:data.stock,
-    //     productImage:[img0,img1.img2,img3]
-        
-    // }
-
+    let data = req.body
+    let images = req.files
+  
 
     editproductPost(data,images).then((response)=>
     {
@@ -446,8 +423,18 @@ catch(error)
 viewOrders:async(req,res,next)=>
 {
 try{
-    let orders=await getOrders()
-    res.render('admin/orderlist',{layout,adin:true,orders})
+    let Pageno = req.query.page||1
+  
+    let pageNum = parseInt(Pageno)
+    let orders = await getOrders()
+    let TotalOrder = orders.length
+    let lmt=8
+    let Pages=[]
+    for(let i=1;i<=Math.ceil(TotalOrder/lmt);i++){
+        Pages.push(i)
+      }
+      let Orders = await TotalOrders(pageNum,lmt)
+    res.render('admin/orderlist',{layout,adin:true,Orders,Pages})
 }
 catch(error)
 {
@@ -460,8 +447,8 @@ catch(error)
 orderDetail:async(req,res,next)=>
 {
     try{
-        let orders=await getOrdersad(req.params.id)
-        let orderedproducts= await vieworderedproducts(req.params.id)
+        let orders = await getOrdersad(req.params.id)
+        let orderedproducts = await vieworderedproducts(req.params.id)
         res.render('admin/orderdetail',{layout,adin:true,orderedproducts,orders})
     }
     catch(error)
@@ -473,7 +460,7 @@ orderDetail:async(req,res,next)=>
 },
 statusChange:(req,res,next)=>
 {
-    console.log(req.body,'hbhb');
+   
 try
 {
     statusPin(req.body).then((response)=>
@@ -492,10 +479,10 @@ catch(error)
 downloadReport:async(req,res,next)=>
 {
 try{
-    let Orders= await downloadReport()
-    let Data= await adminSalesGraph()
+    let Orders = await downloadReport()
+    let Data = await adminSalesGraph()
 
-        console.log(Orders,'ev');
+        
         res.render('admin/sales-report',{layout,adin:true,Orders,Data})
 
     
@@ -519,7 +506,7 @@ catch(error)
 },
 addNewcpn:(req,res,next)=>
 {
-    console.log(req.body,'asdf');
+    
     try
     {
         CouponAd(req.body).then((response)=>
@@ -541,8 +528,8 @@ couponView:async(req,res,next)=>
 {
     try
     {
-       let Coupons= await getAllCoupons()
-       console.log(Coupons,'cpn');
+       let Coupons = await getAllCoupons()
+      
     res.render('admin/view-coupon',{layout,adin:true,Coupons})
     }
     catch(error)
@@ -553,12 +540,20 @@ couponView:async(req,res,next)=>
 },
 DeleteCoupon:(req,res,next)=>
 {
-    let Id=req.query.id
-    console.log(Id,'fck');
-    deleteCoupons(Id).then((response)=>
+    try{
+        const Id = req.query.id
+    
+        deleteCoupons(Id).then((response)=>
+        {
+            res.redirect('/admin/view-coupons')
+        })
+    }
+    catch(error)
     {
-        res.redirect('/admin/view-coupons')
-    })
+        res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+    }
+
+  
 }
 
  

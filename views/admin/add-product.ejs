@@ -12,29 +12,29 @@
                 <div class="card-body">
                     <div class="mb-4">
                         <label for="product_title" class="form-label">Product title</label>
-                        <input type="text" placeholder="Type here" class="form-control" id="product_title" name="title">
+                        <input type="text" required placeholder="Type here" class="form-control" id="product_title" name="title">
                     </div>
                     <div class="row gx-3">
                        
                         <div class="col-md-4  mb-3">
                             <label for="product_color" class="form-label">Color</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="product_color" name="color">
+                            <input type="text"  required placeholder="Type here" class="form-control" id="username1" name="color">
                         </div>
                         <div class="col-md-4  mb-3">
                             <label for="product_size" class="form-label">Size</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="product_size" name="size">
+                            <input type="text" required min="6" placeholder="Type here" class="form-control" id="username2" name="size">
                         </div>
                     </div>
                     <div class="mb-4">
                         <label for="product_brand" class="form-label">Brand</label>
-                        <input type="text" placeholder="Type here" class="form-control" id="product_brand"name="brand">
+                        <input type="text" required placeholder="Type here" class="form-control" id="username3"name="brand">
                     </div>
                     <div class="col-md-4  mb-3">
                         <label for="product_color" class="form-label">Price</label>
-                        <input type="text" placeholder="Type here" class="form-control" id="product_color" name="price">
+                        <input type="number" min="1000" required placeholder="Type here" class="form-control" id="username4" name="price">
                         <div class="col-md-4  mb-3">
                             <label for="product_color" class="form-label">Stock</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="product_color" name="stock">
+                            <input type="number" required  min="1" placeholder="Type here" class="form-control" id="username5" name="stock">
                     </div>
                 </div>
             </div> <!-- card end// -->
@@ -42,7 +42,7 @@
                 <div class="card-body">
                     <div>
                         <label class="form-label">Description</label>
-                        <textarea placeholder="Type here" class="form-control" rows="4" name="description"></textarea>
+                        <textarea placeholder="Type here" required class="form-control" rows="4" name="description"></textarea>
                     </div>
                 </div>
             </div> <!-- card end// -->
@@ -81,8 +81,8 @@
                     
                     <h5 class="mb-3">Categories</h5>
                     <% for( var category of categories) { %>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="<%= category.name %>" id="product-cat" name="category">
+                    <div class="form-check" >
+                        <input class="form-check-input"  type="checkbox" value="<%= category.name %>"  name="category">
                         <label class="form-check-label" for="product-cat"><%= category.name %></label>
                     </div>
                     
@@ -109,7 +109,7 @@
         <div class="col-sm-6">
             <script>
             document.write(new Date().getFullYear())
-            </script> ©, Evara - HTML Ecommerce Template .
+            </script> ©, Better Buy .
         </div>
         <div class="col-sm-6">
             <div class="text-sm-end">
@@ -132,4 +132,39 @@
   }
 }
      }
+
+ 
+ 
+
+     let  categoryIput = document.getElementById("username1");
+   categoryIput.addEventListener('keypress', (event)=>{    
+     if(event.code=== "Space"){
+      event.preventDefault(); 
+    }
+})
+let  categorIput = document.getElementById("username2");
+   categoryIput.addEventListener('keypress', (event)=>{    
+     if(event.code=== "Space"){
+      event.preventDefault(); 
+    }
+})
+let  cateoryIput = document.getElementById("username3");
+   categoryIput.addEventListener('keypress', (event)=>{    
+     if(event.code=== "Space"){
+      event.preventDefault(); 
+    }
+})
+
+let  catgoryIput = document.getElementById("username4");
+   categoryIput.addEventListener('keypress', (event)=>{    
+     if(event.code=== "Space"){
+      event.preventDefault(); 
+    }
+})
+let  cateryIput = document.getElementById("username5");
+   categoryIput.addEventListener('keypress', (event)=>{    
+     if(event.code=== "Space"){
+      event.preventDefault(); 
+    }
+})
 </script>

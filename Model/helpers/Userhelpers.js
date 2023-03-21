@@ -26,21 +26,29 @@ doUserLOgin:(user)=>
 
         let response={}
     let validuser= await db.get().collection(collection.USERCOLLECTION).findOne({email:user.email})
+    
      if(validuser )
      {
         bcrypt.compare(user.password,validuser.password).then((status)=>
         {
             if(status)
             {
-            
-                response.validuser=validuser;
-                response.status=true
-                resolve(response)
+                if(validuser.status){
+                    response.validuser=validuser;
+                    response.status=true
+                    resolve(response)
+                }
+                else
+                {
+                    response.status=false
+                    resolve(response)
+                }
+               
             }
             else
             {
-                
-                resolve({status:false})
+                response.status=false
+                resolve(response)
             }
         })
         }
@@ -80,6 +88,14 @@ addUserSignup:(user)=>
 
  
 
+},
+getUSer:(Id)=>
+{
+    return new Promise(async(resolve,reject)=>
+    {
+     let user= await db.get().collection(collection.USERCOLLECTION).findOne({_id:objectId(Id)})
+     resolve(user)
+    })
 },
  Dootplogin:(data)=>
  {
@@ -275,27 +291,7 @@ viewproductUser:(productid)=>
                             total:{$sum:{$multiply:[{$toDouble:'$quantity'},{$toDouble:'$product.price'}]}}
                         }
                     }
-                    // {
-                    //    $lookup:{
-                    //     from:collection.PRODUCTCOLLECTION,
-                    //     let: {prolist:'$product'},
-                    //     pipeline:[{
-                    //        $match:{
-                    //         $expr:
-                    //         {
-                    //             $in:['$_id','$$prolist']
-                                
-    
-                                
-                    //         }
-                    //        } 
-                    //     }],
-    
-                    //   as:
-                    //     'cartItems'
-                      
-                    //    } 
-                    // }
+                  
                 ]).toArray()
                
                     resolve(cartItems)
@@ -426,9 +422,7 @@ getTotal:(userid)=>
     orderPost:(order,userId,product,total)=>
     {
        
-            console.log(order,'vannu')
-            console.log(product,'varuo');
-            console.log(total,'varanm');
+           
             return new Promise(async(resolve,reject)=>
             {
                 let status=order.paymentmethod=='cod'?'placed':'pending'
@@ -444,12 +438,12 @@ getTotal:(userid)=>
                     
                     userId:objectId(userId),
                     products:product,
-                    totalAmount:order.totalPrice,
+                    totalAmount:parseInt(order.totalPrice),
                     status:status,
                     date: moment().format('MMMM Do YYYY, h:mm:ss a')
     
                 }
-                console.log(orderObj,'drop');
+                
                  await db.get().collection(collection.ORDERCOLLECTION).insertOne(orderObj).then((response)=>
                  {
                      db.get().collection(collection.CARTCOLLECTION).deleteOne({user:objectId(userId)})
@@ -480,7 +474,7 @@ getTotal:(userid)=>
             return new Promise(async(resolve,reject)=>
             {
                 let order=await db.get().collection(collection.ORDERCOLLECTION).find({userId:objectId(userid)}).sort({date:-1}).toArray()
-                console.log(order,'chck');
+               
                 
                 
                 resolve(order)
@@ -526,7 +520,7 @@ getTotal:(userid)=>
                     
                
                 ]).toArray()
-               console.log(orderItems,'lobbb');
+               
                     resolve(orderItems)
                 
                
@@ -608,8 +602,7 @@ getTotal:(userid)=>
  },
  retypePass:(data,contactNoo)=>
  {
-        console.log(contactNoo,'vvv');
-        console.log(data.newpassword,'kk');
+       
         return new Promise(async(resolve,reject)=>
         {
           let newpassword=  await bcrypt.hash(data.newpassword,10)
@@ -620,7 +613,7 @@ getTotal:(userid)=>
                 }
             }).then((response)=>
             {
-                console.log(response);
+               
             resolve(response)
             })
         })
@@ -659,7 +652,7 @@ getTotal:(userid)=>
         return new Promise(async(resolve, reject) =>
         {
            let womenProduct=await db.get().collection(collection.PRODUCTCOLLECTION).find({category:'Women'}).toArray()
-           console.log(womenProduct,'wmn');
+           
            resolve(womenProduct)
         })
     
@@ -886,7 +879,7 @@ accountEdit:(Data,userId)=>
         
             return new Promise(async(resolve,reject)=>
             {
-                console.log(adId);
+                
                 adId=parseInt(adId)
                
                 
@@ -916,7 +909,7 @@ accountEdit:(Data,userId)=>
     paymentStatusChange:(orderId)=>
     { 
        
-            console.log(orderId,'pay');
+           
             return new Promise(async(resolve,reject)=>{
             
                 await db.get().collection(collection.ORDERCOLLECTION).updateOne({_id:objectId(orderId)},
@@ -926,7 +919,7 @@ accountEdit:(Data,userId)=>
                         status:'placed'
                     }
                 }).then((response)=>
-                {console.log(response,'kkkresponse');
+                {
                     resolve(response)
                 })
             })
@@ -961,13 +954,13 @@ accountEdit:(Data,userId)=>
     TotalProductView:(Pageno,lmt)=>
     {
         let skipNum=parseInt((Pageno-1)*lmt)
-        console.log(skipNum,'skip');
+        
 
         return new Promise(async(resolve,reject)=>
         {
            let Products= await db.get().collection(collection.PRODUCTCOLLECTION).find().skip(skipNum).limit(lmt).toArray()
            resolve(Products)
-           console.log(Products,'pp');
+           
 
         })
     },
@@ -986,15 +979,15 @@ accountEdit:(Data,userId)=>
            
            
             }).toArray()
-            console.log(SrchRslt,'alo');
+            
             if(SrchRslt.length>0)
             {
-                console.log('Item found');
+                
                 resolve(SrchRslt)
             }
         
             
-                console.log('Item not Found');
+                
                 reject()
             
            
@@ -1008,17 +1001,17 @@ accountEdit:(Data,userId)=>
         return new Promise(async(resolve,reject)=>
         {
          let validCoupon=  await db.get().collection(collection.COUPONCOLLECTION).findOne({couponid:Data.coupon,date:{$gte:new Date()}})
-         console.log(validCoupon,'kkkpp');
+         
         if(validCoupon!=null)
         {
-            console.log('Coupon Found');
+            
             let offerPer=parseInt(validCoupon.offerpercentage)
-            console.log(offerPer,'perce');
+           
              let discAmt=(Total*offerPer)/100
              discAmt=Math.trunc(discAmt)
-             console.log(discAmt,'discamt');
+             
              let maxReduction=parseInt(validCoupon.reducedmaxamount)
-             console.log(maxReduction,'fgg');
+             
              if(discAmt>=maxReduction)
              {
              var totalAmt=Total-maxReduction
@@ -1039,7 +1032,7 @@ accountEdit:(Data,userId)=>
         }
         else
         {
-            console.log('coupon not Found');
+           
             let offer={}
              offer.totalAmt=0
              offer.discAmt=0
@@ -1080,7 +1073,7 @@ accountEdit:(Data,userId)=>
         }
         else
         {
-            console.log('Neworder',order);
+           
             resolve(order)
         }
      })
@@ -1098,13 +1091,127 @@ accountEdit:(Data,userId)=>
                     status:'placed'
                 }
             }).then((response)=>
-            {console.log(response,'kkkresponse');
+            {
                 resolve(response)
             })
         })
           
 
         
+    },
+
+    addtoWish:(ProId,UserId)=>
+    {
+       
+        let proObj={
+            item:objectId(ProId)
+        }
+        return new Promise(async(resolve,reject)=>
+        {
+            let userWish=await db.get().collection(collection.WISHCOLLECTION).findOne({user:objectId(UserId)})
+            if(userWish)
+            {
+             let proExist =userWish.product.findIndex(product=>product.item==ProId)   
+             
+             if(proExist!=-1)
+             {
+             
+                resolve()
+            }
+             else{
+
+             
+             await db.get().collection(collection.WISHCOLLECTION)
+            .updateOne({user:objectId(UserId)},
+            {
+                
+                    $push:{product:proObj}
+                }
+                ).then((response)=>
+                {
+                    resolve({status:true})
+                })
+             }
+            }
+            
+            
+            else
+            {
+                let wishObj=
+                {
+                    user:objectId(UserId),
+                    product:[proObj]
+                }
+               await db.get().collection(collection.WISHCOLLECTION).insertOne(wishObj).then((response)=>
+                {
+                    resolve({status:true})
+
+                })
+            }
+        })
+    
+    
+ 
+  
+    },
+    wishItemview:(userId)=>
+    {
+        return new Promise(async(resolve,reject)=>
+        {
+            let wishItems=await db.get().collection(collection.WISHCOLLECTION).aggregate([
+                {
+                    $match:{user:objectId(userId)}
+                },
+                {
+                    $unwind:'$product'
+                },
+                {
+                    $project:{
+                        item:'$product.item'
+                        
+                    }
+                },
+                {
+                    $lookup:{
+                        from:collection.PRODUCTCOLLECTION,
+                        localField:'item',
+                        foreignField:'_id',
+                        as:'product'
+                    }
+                },
+                {
+                    $project:{
+                        item:1,product:{$arrayElemAt:['$product',0]}
+                    }
+                },
+                {
+                    $project:{
+                        item:1,product:1,
+                        
+                    }
+                }
+              
+            ]).toArray()
+           
+                resolve(wishItems)
+            
+           
+            })
+   
+
+    },
+    removeProductwish:(data)=>
+    {
+        return new Promise(async(resolve,reject)=>
+        {
+            await db.get().collection(collection.WISHCOLLECTION).updateOne({_id:objectId(data.wish)},
+            {
+                $pull:{product:{item:(objectId(data.product))}}
+            }).then((response)=>
+            {
+                resolve({removeItem:true})
+            })
+        })
     }
            
           

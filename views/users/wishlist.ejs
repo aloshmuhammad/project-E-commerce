@@ -1,0 +1,88 @@
+<section>
+    <div class="row" style="width: 100%; height: 20px; background-color: white;">
+        
+    </div>
+
+    <div class="page-content">
+        <div class="container">
+            <table class="table table-wishlist table-mobile">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Stock Status</th>
+                        
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <%wishList.forEach(list=>{ %>
+                    <tr id="<%=list.item%>">
+                        <td class="product-col" >
+                            <div class="product">
+                                <figure class="product-media">
+                                    <a href="#">
+                                        <img src="/ad asset/productImages/<%=list.product.productImage[0] %>" alt="Product image">
+                                    </a>
+                                </figure>
+
+                                <h3 class="product-title">
+                                    <a href="#"><%=list.product.title%></a>
+                                </h3><!-- End .product-title -->
+                            </div><!-- End .product -->
+                        </td>
+                        <td class="price-col"><%=list.product.price%></td>
+                        <td class="stock-col"><span class="in-stock">In stock</span></td>
+                        <td class="action-col">
+                            <button onclick="addtoCart('<%=list.product._id%>')" class="btn btn-block btn-outline-primary-2"><i class="icon-cart-plus"></i>Add to
+                                Cart</button>
+                            
+                            </div>
+                        </td>
+                        <td class="remove-col"><button class="btn-remove"onclick="removecart('<%=list._id%>','<%=list.item%>')"><i class="icon-close"></i></button></td>
+             
+                    </tr>
+                    <%})%>
+                   
+                    
+                </tbody>
+            </table><!-- End .table table-wishlist -->
+            <div class="wishlist-share">
+                <div class="social-icons social-icons-sm mb-2">
+                    <label class="social-label">Share on:</label>
+                    <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                    <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                    <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
+                    <a href="#" class="social-icon" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
+                    <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
+                </div><!-- End .soial-icons -->
+            </div><!-- End .wishlist-share -->
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
+</section>
+
+<script>
+     function removecart(wishId,prodId)
+    {
+        $.ajax({
+            url:'/remove-from-wish',
+            data:{
+                wish:wishId,
+                product:prodId
+
+            },
+            method:'delete',
+            success:(response)=>
+            {
+                if(response.removeItem)
+                {
+                    swal('Product removed from Wishlist')
+                    $(`#${prodId}`).addClass('d-none')
+                    
+                }
+            }
+
+        })
+    }
+    
+</script>

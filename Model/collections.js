@@ -5,7 +5,8 @@ module.exports={
     CATEGORYCOLLECTION:'category',
     CARTCOLLECTION:'cart',
     ORDERCOLLECTION:'order',
-    COUPONCOLLECTION:'coupon'
+    COUPONCOLLECTION:'coupon',
+    WISHCOLLECTION:'wishlist'
 }
 
     

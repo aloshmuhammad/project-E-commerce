@@ -17,7 +17,7 @@
               <form class="px-md-2" method="post" action="/admin/add-coupon">
   
                 <div class="form-outline mb-4">
-                  <input type="text" name="couponid" id="form3Example1q" class="form-control" style="border:solid;"  />
+                  <input type="text" name="couponid" required id="form3Example1q" class="form-control" style="border:solid;"  />
                   <label class="form-label" for="form3Example1q" style="color: black;">Coupon ID</label>
                 </div>
   
@@ -25,7 +25,7 @@
                   <div class="col-md-6 mb-4">
   
                     <div class="form-outline datepicker">
-                      <input type="date" class="form-control" name="date" id="exampleDatepicker1" style="border:solid;" />
+                      <input type="date" class="form-control" required name="date"  id="userdate" style="border:solid;"onchange="TDate()" />
                       <label for="exampleDatepicker1" class="form-label" style="color: black;">Expiry Date</label>
                     </div>
   
@@ -39,7 +39,7 @@
                   <div class="col-md-6">
   
                     <div class="form-outline">
-                      <input type="decimal" id="form3Example1w" name="offerpercentage" class="form-control" style="border:solid;"  />
+                      <input type="number" id="form3Example1w" required name="offerpercentage" min="1" class="form-control" style="border:solid;"  />
                       <label class="form-label" for="form3Example1w" style="color: black;">Offer Percentage</label>
                     </div>
   
@@ -49,7 +49,7 @@
                     <div class="col-md-6">
     
                       <div class="form-outline">
-                        <input type="decimal" id="form3Example1w" name="reducedmaxamount"class="form-control" style="border:solid;" />
+                        <input type="number" id="form3Example1w" required name="reducedmaxamount"class="form-control" min="1" style="border:solid;" />
                         <label class="form-label" for="form3Example1w" style="color: black;">Maximum Amount in Reduction </label>
                       </div>
     
@@ -59,7 +59,7 @@
                     <div class="col-md-6 mb-4">
     
                       <div class="form-outline datepicker">
-                        <input type="decimal" class="form-control" name="minprice" id="exampleDatepicker1" style="border:solid;" />
+                        <input type="number" class="form-control" min="1" name="minprice" id="exampleDatepicker1" style="border:solid;" />
                         <label for="exampleDatepicker1" class="form-label" style="color: black;">Minimum Valid Price</label>
                       </div>
     
@@ -83,5 +83,17 @@
       </div>
     </div>
   </section>
+  <script>
+    function TDate() {
+    var UserDate = document.getElementById("userdate").value;
+    var ToDate = new Date();
+
+    if (new Date(UserDate).getTime() <= ToDate.getTime()) {
+          swal("The Date must be Bigger or Equal to today date");
+          return false;
+     }
+    return true;
+}
+  </script>
   
   

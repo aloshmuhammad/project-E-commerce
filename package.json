@@ -27,6 +27,7 @@
     "razorpay": "^2.8.6",
     "save": "^2.9.0",
     "session": "^0.1.0",
+    "sweetalert2": "^11.7.3",
     "twilio": "^4.8.0"
   },
   "main": "app.js",

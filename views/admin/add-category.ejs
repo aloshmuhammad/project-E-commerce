@@ -15,13 +15,13 @@
                     <form action="/admin/add-category" method="post">
                         <div class="mb-4">
                             <label for="product_name" class="form-label">Name</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="product_name" name="name" />
+                            <input type="text" placeholder="Type here"required class="form-control" id="username1" name="name" />
                         </div>
                         
                         
                         <div class="mb-4">
                             <label class="form-label">Description</label>
-                            <textarea placeholder="Type here" class="form-control" name="Description"></textarea>
+                            <textarea placeholder="Type here" class="form-control" required name="Description"></textarea>
                         </div>
                         <div class="d-grid">
                             <button class="btn btn-primary" type="submit">Create category</button>
@@ -45,3 +45,12 @@
     </div>
 </footer>
 </main>
+<script>
+    //Spcaebar hidingg Code....
+   let  categoryIput = document.getElementById("username1");
+   categoryIput.addEventListener('keypress', (event)=>{    
+     if(event.code=== "Space"){
+      event.preventDefault(); 
+    }
+})
+</script>

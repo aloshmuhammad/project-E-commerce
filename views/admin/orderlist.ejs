@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% orders.forEach(order=> { %>
+                        <% Orders.forEach(order=> { %>
                         <tr>
                             <td><%=order._id%></td>
                             <td><b><%=order.deliveryDetails.firstname%></b></td>
@@ -51,16 +51,25 @@
             </div> <!-- table-responsive //end -->
         </div> <!-- card-body end// -->
     </div> <!-- card end// -->
-    <div class="pagination-area mt-15 mb-50">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-start">
-                <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                <li class="page-item"><a class="page-link" href="#">02</a></li>
-                <li class="page-item"><a class="page-link" href="#">03</a></li>
-                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                <li class="page-item"><a class="page-link" href="#">16</a></li>
-                <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
-            </ul>
-        </nav>
-    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+         
+          <% Pages.forEach(page=>{ %>
+        
+          <li class="page-item" ><a class="page-link"  href="/admin/orderview/?page=<%=page %>" aria-label="<%= page %>"><%= page %></a></li>
+          
+         <% }) %>
+          <li class="page-item">
+            <a class="page-link" href="" aria-label="Next"> 
+              <span aria-hidden="true">&raquo;</span> 
+            </a> 
+           </li>
+      </ul>
+      </nav>
 </section> <!-- content-main end// -->

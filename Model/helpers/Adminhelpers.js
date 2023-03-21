@@ -11,14 +11,14 @@ adminLOgin:(data)=>
         {   let response={}
             let validadmin= await db.get().collection(collection.ADMINCOLLECTION).findOne({email:data.email,password:data.password})
             if(validadmin)
-            {    console.log("login sucess")
+            {    
                 response.validadmin=validadmin
                 response.status=true
                 resolve(response)
                 
             }
             else{
-                console.log("loginfailed")
+                
                 response.status=false
                 resolve(response)
             }
@@ -126,7 +126,8 @@ deleteCategory:(userid)=>
  {
     
         return new Promise(async(resolve,reject)=>
-        {
+        { 
+           
         
             await db.get().collection(collection.CATEGORYCOLLECTION).deleteOne({_id:objectId(userid)}).then((response)=>
             {
@@ -241,7 +242,7 @@ editproductPost:(data,images)=>
    
         return new Promise(async(resolve,reject)=>
         { 
-            let product=await db.get().collection(collection.PRODUCTCOLLECTION).findOne({_id:objectId(data.id)})
+            let product = await db.get().collection(collection.PRODUCTCOLLECTION).findOne({_id:objectId(data.id)})
         if(images.img0)
         {
             product.productImage[0]=images.img0[0].filename
@@ -295,7 +296,7 @@ getOrders:()=>
    
         return new Promise(async(resolve,reject)=>
         {
-            let Orders=await db.get().collection(collection.ORDERCOLLECTION).find().sort({date:-1}).toArray()
+            let Orders = await db.get().collection(collection.ORDERCOLLECTION).find().sort({date:-1}).toArray()
             
                 
              resolve(Orders)
@@ -309,7 +310,7 @@ vieworderedproducts:(orderid)=>
 
     return new Promise(async(resolve,reject)=>
     {
-        let adminorderItems=await db.get().collection(collection.ORDERCOLLECTION).aggregate([
+        let adminorderItems = await db.get().collection(collection.ORDERCOLLECTION).aggregate([
             {
                 $match:{_id:objectId(orderid)}
             },
@@ -357,7 +358,7 @@ getOrdersad:(orderid)=>
     
         return new Promise(async(resolve,reject)=>
         {
-            let Orders=await db.get().collection(collection.ORDERCOLLECTION).findOne({_id:objectId(orderid)})
+            let Orders = await db.get().collection(collection.ORDERCOLLECTION).findOne({_id:objectId(orderid)})
             
                 
              resolve(Orders)
@@ -371,7 +372,7 @@ getOrdersad:(orderid)=>
 statusPin:(data)=>
 { 
     
-        let orderid=data.orderid
+        let orderid = data.orderid
         
         
             
@@ -412,17 +413,18 @@ adminSalesGraph:()=>
         return new Promise(async(resolve,reject)=>
         {
             let Data={}
-            Data.codCount= await db.get().collection(collection.ORDERCOLLECTION).find({paymentmethod:'cod'}).count()
-            Data.onlinePay=await db.get().collection(collection.ORDERCOLLECTION).find({paymentmethod:'paypal'}).count()
-            Data.PlacedCount=await db.get().collection(collection.ORDERCOLLECTION).find({status:'placed'}).count()
-            Data.PendingCount=await db.get().collection(collection.ORDERCOLLECTION).find({status:'pending'}).count()
-            Data.ReturnedCOUNT=await db.get().collection(collection.ORDERCOLLECTION).find({status:'RETURNED'}).count()
+            Data.codCount = await db.get().collection(collection.ORDERCOLLECTION).find({paymentmethod:'cod'}).count()
+            Data.onlinePay = await db.get().collection(collection.ORDERCOLLECTION).find({paymentmethod:'paypal',paymentmethod:'razorpay'}).count()
+            Data.PlacedCount = await db.get().collection(collection.ORDERCOLLECTION).find({status:'placed'}).count()
+            Data.PendingCount = await db.get().collection(collection.ORDERCOLLECTION).find({status:'pending'}).count()
+            Data.ReturnedCOUNT = await db.get().collection(collection.ORDERCOLLECTION).find({status:'RETURNED'}).count()
 
-            Data.DeliveredCount=await db.get().collection(collection.ORDERCOLLECTION).find({status:'Delivered'}).count()
-            Data.CanceledCount=await db.get().collection(collection.ORDERCOLLECTION).find({status:'Cancelled'}).count()
-            Data.ProductsCount=await db.get().collection(collection.PRODUCTCOLLECTION).find({}).count()
-            Data.CategoryCount=await db.get().collection(collection.CATEGORYCOLLECTION).find({}).count()
-            Data.TotalDeliveredPrice=await db.get().collection(collection.ORDERCOLLECTION).aggregate([{$match:{status:'Delivered'}},{$group:{_id:'null',TotalRevenue:{$sum:'$totalAmount'}}}]).toArray()
+            Data.DeliveredCount = await db.get().collection(collection.ORDERCOLLECTION).find({status:'Delivered'}).count()
+            Data.CanceledCount = await db.get().collection(collection.ORDERCOLLECTION).find({status:'Cancelled'}).count()
+            Data.ProductsCount = await db.get().collection(collection.PRODUCTCOLLECTION).find({}).count()
+            Data.CategoryCount = await db.get().collection(collection.CATEGORYCOLLECTION).find({}).count()
+            Data.TotalDeliveredPrice = await db.get().collection(collection.ORDERCOLLECTION).aggregate([{$match:{status:'Delivered'}},{$group:{_id:null,TotalRevenue:{$sum:'$totalAmount'}}}]).toArray()
+            
 
 
             resolve (Data)
@@ -469,6 +471,18 @@ deleteCoupons:(Id)=>
         {
             resolve(response)
         })
+    })
+},
+TotalOrders:(PageNo,lmt)=>
+{
+    let skipNum=parseInt((PageNo-1)*lmt)
+    
+    return new Promise(async(resolve,reject)=>
+    {
+       let Orders= await db.get().collection(collection.ORDERCOLLECTION).find().sort({date:-1}).skip(skipNum).limit(lmt).toArray()
+       resolve(Orders)
+       
+
     })
 }
 

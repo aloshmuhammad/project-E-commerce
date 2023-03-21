@@ -191,7 +191,7 @@
                                     </a>
 
                                     <div class="product-action-vertical">
-                                        <a href="/view-product/<%=product._id%>" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                        <a onclick="addtoWish('<%=product._id%>')" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
                                     </div><!-- End .product-action-vertical -->
                                 </figure><!-- End .product-media -->
 
@@ -206,14 +206,23 @@
                               
                                     
                                 <div class="product-footer">
-                                    <!-- <button onclick="addtoCart('<%=products._id%>')" class="btn btn-primary">Add To Cart</button> -->
+                                   
 
-                                    <div class="product-action">
-                                        <button onclick="addtoCart('<%=product._id%>')" style="display: flex;" class="btn btn-primary">Add To Cart</button>
-                                        <!-- <a href="#" class="btn-product btn-cart"><span>add to cart</span></a> -->
-                                       
+                                   
+                                        <div class="product-action">
+                                            <a onclick="addtoCart('<%=product._id%>')" class="btn-product btn-cart"><span>add to cart</span></a>
+                                            
+                                        </div><!-- End .product-action -->
+                                        <div class="product-action-vertical">
+                                            <a  onclick="addtoWish('<%=product._id%>')" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                        </div><!-- End .product-action-vertical -->
+                                        <!-- <button  onclick="addtoCart('<%=product._id%>')"  class="btn btn-outline-primary btn-sm mr-md-3 mb-2 mb-md-0" >Add To Cart</button>
+                                        <button  onclick="addtoWish('<%=product._id%>')" class="btn btn-outline-primary btn-sm mr-md-3 mb-2 mb-md-0">ADD To Wish</button>
                                         
-                                    </div><!-- End .product-action -->
+                                        -->
+                                        
+                                    
+                                 
                                 </div><!-- End .product-footer -->
                             
                               
@@ -283,6 +292,7 @@
 
                                     <div class="product-action">
                                         <button onclick="addtoCart('<%=product._id%>')" class="btn btn-primary">Add To Cart</button>
+                                        <button onclick="addtowishlist('<%=product._id%>')" class="btn btn-primary">Add To Cart</button>
                                         
                                         
                                     </div><!-- End .product-action -->
@@ -794,7 +804,7 @@
                     <div class="banner-content text-center">
                         <img src="assets/images/popup/newsletter/logo.png" class="logo" alt="logo" width="60" height="15">
                         <h2 class="banner-title">get <span>25<light>%</light></span> off</h2>
-                        <p>Subscribe to the Molla eCommerce newsletter to receive timely updates from your favorite products.</p>
+                        <p>Subscribe to the Better Buy newsletter to receive timely updates from your favorite products.</p>
                         <form action="#">
                             <div class="input-group input-group-round">
                                 <input type="email" class="form-control form-control-white" placeholder="Your Email Address" aria-label="Email Adress" required>

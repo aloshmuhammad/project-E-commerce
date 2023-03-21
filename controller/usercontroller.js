@@ -5,7 +5,7 @@ var userHelper=require('../Model/helpers/Userhelpers');
 const paypal=require('paypal-rest-sdk')
 
 const crypto = require('crypto')
-const {getMenproduct,getWomenproducts,getcartCount,getAllproducts,addUserSignup,doUserLOgin,Dootplogin,viewproductUser,validOtp,addTocart,getTotal,changeProductquantity,cartView,removeProductcart,getproductList,orderPost,vieworders,vieworderedProducts,cancelOrderlist,otppassCheck,otpvc,retypePass,editAccount,accountEdit,addressSubmit,getUsers,allAddresses,chngeDefault, paymentStatusChange,TotalProductView,SrchPro,checkCoupon,returnOrder,generateRazorpay, verifyPaymentRazorpay}=userHelper
+const {getMenproduct,getWomenproducts,getcartCount,getAllproducts,addUserSignup,doUserLOgin,Dootplogin,viewproductUser,validOtp,addTocart,getTotal,changeProductquantity,cartView,removeProductcart,getproductList,orderPost,vieworders,vieworderedProducts,cancelOrderlist,otppassCheck,otpvc,retypePass,editAccount,accountEdit,addressSubmit,getUsers,allAddresses,chngeDefault, paymentStatusChange,TotalProductView,SrchPro,checkCoupon,returnOrder,generateRazorpay, verifyPaymentRazorpay,addtoWish, wishItemview,removeProductwish}=userHelper
 require('dotenv').config()
 
 paypal.configure({
@@ -18,10 +18,10 @@ module.exports = {
   
 homePage: async(req, res, next)=> {
   try{
-    let user= req.session.user
-    let menProducts=await getMenproduct()
-      let womenProducts=await getWomenproducts()
-      console.log('women=',womenProducts);
+    const user = req.session.user
+    const menProducts = await getMenproduct()
+    const womenProducts = await getWomenproducts()
+     
     
     if(user)
     {
@@ -104,7 +104,7 @@ signIn:(req,res,next)=>
       { 
       
         
-        let olduser=user.status
+        const olduser = user.status
         if(olduser)
         {
           res.render('users/signup')
@@ -130,11 +130,12 @@ signIn:(req,res,next)=>
     
         if(response.status)
         {
-          req.session.loggedIn=true;
-      req.session.user=response.validuser
+          req.session.loggedIn = true;
+      req.session.user = response.validuser
           res.redirect('/')
         }
         else{
+
           res.render('users/signin',{nouser:true,user:false})
         }
       })
@@ -150,8 +151,8 @@ signIn:(req,res,next)=>
       logoutUser:(req,res,next)=>
       {
     try{
-      req.session.loggedIn=false;
-      req.session.user=null
+      req.session.loggedIn = false;
+      req.session.user = null
 
 
   res.redirect("/login");
@@ -175,8 +176,8 @@ signIn:(req,res,next)=>
           {
           if(response.status)
           {
-            req.session.user=response.user
-          req.session.contactNo=req.body.contactNo
+            req.session.user = response.user
+          req.session.contactNo = req.body.contactNo
         
   
            res.render('users/otp-login',{user:false})
@@ -210,7 +211,7 @@ signIn:(req,res,next)=>
    {
     try
     {
-      let contactNo=req.session.contactNo
+      let contactNo = req.session.contactNo
 
       validOtp(req.body,contactNo).then((response)=>
       {
@@ -236,8 +237,8 @@ signIn:(req,res,next)=>
       { 
         try
         {
-          let productid=req.params.id
-          let userId=req.session.user._id
+          const productid = req.params.id
+          const userId = req.session.user._id
   
        let name=req.session.user.firstName
         let cartCount=await getcartCount(userId)
@@ -262,9 +263,9 @@ signIn:(req,res,next)=>
    {
     try
     {
-      productid=req.params.id
+      const productid = req.params.id
     
-      userid=req.session.user._id
+      const userid = req.session.user._id
       
       addTocart(productid,userid).then((response)=>
       {
@@ -284,16 +285,16 @@ signIn:(req,res,next)=>
    {
     try
     {
-      let name=req.session.user.firstName
+      const name = req.session.user.firstName
 
-      let Total=await getTotal(req.session.user._id)
+      const Total = await getTotal(req.session.user._id)
     
     
-      let cartCount=await getcartCount(req.session.user._id)
+      const cartCount = await getcartCount(req.session.user._id)
     
       cartView(req.session.user._id).then((cartItems)=>
       {
-      req.session.cartItems=cartItems
+      req.session.cartItems = cartItems
         
           res.render('users/cart',{user:true,login:true,cartItems,cartCount,name,Total})
           
@@ -345,8 +346,8 @@ signIn:(req,res,next)=>
    {
     try
     {
-      let Total=await getTotal(req.session.user._id)
-      let user=await getUsers(req.session.user._id)
+      const Total = await getTotal(req.session.user._id)
+      const user = await getUsers(req.session.user._id)
     
      
     
@@ -366,24 +367,23 @@ signIn:(req,res,next)=>
    placeorderPost:async(req,res,next)=>
    {
     
-      let user=req.session.user
+      let user = req.session.user
   
-      console.log(req.body,'shibin');
+
      
     
-      let product=await getproductList(user._id)
-      var totalamount=await getTotal(user._id)
+      let product = await getproductList(user._id)
+      var totalamount = await getTotal(user._id)
   
       
         
     
-      console.log('dfsdfsdafds',totalamount);
      
       orderPost(req.body,user._id,product,totalamount[0].total).then((response)=>
       {
-       let orderId=response.insertedId
-       req.session.orderID=orderId
-       req.session.totalamount= totalamount[0].total
+       let orderId = response.insertedId
+       req.session.orderID = orderId
+       req.session.totalamount = totalamount[0].total
       
    
 
@@ -438,7 +438,7 @@ signIn:(req,res,next)=>
    {
     generateRazorpay(orderId,totalamount[0].total).then((order)=>
     {
-      console.log(order);
+     
      res.render('users/RazorPay',{order})
     })
    }
@@ -458,9 +458,9 @@ signIn:(req,res,next)=>
   paypalSucces: (req, res) => {
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
-    let totalamount=req.session.totalamount
+    let totalamount = req.session.totalamount
     let orderID = req.session.orderID
-    console.log(orderID,'hgh');
+   
     user =req.session.user
     
     const execute_payment_json = {
@@ -481,7 +481,7 @@ signIn:(req,res,next)=>
             throw error;
           } else {
             console.log(JSON.stringify(payment));
-            console.log(orderID,'amal');
+           
             paymentStatusChange(orderID).then((response)=>{
                 res.render('users/ordersucess')
                 req.session.orderID = null
@@ -515,7 +515,7 @@ signIn:(req,res,next)=>
    {
     try
     {
-      let name=req.session.user.firstName
+      const name=req.session.user.firstName
       userid=req.session.user._id
     
       let orders= await vieworders(userid)
@@ -538,16 +538,15 @@ signIn:(req,res,next)=>
    {
     try
     {
-      let orderedproducts=await vieworderedProducts(req.params.id)
-      let name=req.session.user.firstName
+      let orderedproducts = await vieworderedProducts(req.params.id)
+      const name = req.session.user.firstName
      
-      console.log(orderedproducts[0],'oot');
+     
        const date1 = new Date();
        const date2 = new Date(orderedproducts[0].DeliveredDate);
        const diffTime = Math.abs(date1 - date2);
        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-       console.log(diffTime + " milliseconds");
-      console.log(diffDays + " days")
+    
 
       res.render('users/orderdetails',{orderedproducts,diffDays,user:true,name})
         
@@ -565,7 +564,7 @@ signIn:(req,res,next)=>
    {
     try
     {
-      console.log(req.body,'hhh');
+    
       cancelOrderlist(req.body).then((response)=>
       {
         
@@ -601,8 +600,8 @@ signIn:(req,res,next)=>
     {
     if(response.status)
     {
-      req.session.user=response.user
-    req.session.contactNo=req.body.contactNo
+      req.session.user = response.user
+    req.session.contactNo = req.body.contactNo
   
 
      res.render('users/otpvalidpass',{user:false})
@@ -639,7 +638,7 @@ signIn:(req,res,next)=>
    {
     try
     {
-      let contactNo=req.session.contactNo
+      let contactNo = req.session.contactNo
       otpvc(req.body,contactNo).then((response)=>
       {
         if(response.valid)
@@ -679,7 +678,7 @@ signIn:(req,res,next)=>
    {
     try
     {
-      let contactNoo=req.session.contactNo
+      let contactNoo = req.session.contactNo
       retypePass(req.body,contactNoo).then((response)=>
       {
         
@@ -697,10 +696,10 @@ signIn:(req,res,next)=>
    {
     try
     {
-      let userId=req.session.user._id
+      let userId = req.session.user._id
    
-      console.log(userId,'prf')
-     let usersPro=await userHelper.editAccount(userId)
+     
+     let usersPro = await userHelper.editAccount(userId)
      
       res.render('users/myaccount',{user:true,usersPro})
     }
@@ -716,20 +715,20 @@ signIn:(req,res,next)=>
    {
     try
     {
-      let name=req.session.user.firstName
-      let Pageno=req.query.page||1
-      console.log(Pageno,'page');
-      let pageNum=parseInt(Pageno)
+      const name = req.session.user.firstName
+      let Pageno = req.query.page||1
+     
+      let pageNum = parseInt(Pageno)
 
       let products = await getAllproducts()
       let TotalProducts=products.length
-      console.log(TotalProducts,'ggff');
+      
       let lmt=8
       let Pages=[]
       for(let i=1;i<=Math.ceil(TotalProducts/lmt);i++){
         Pages.push(i)
       }
-      console.log(Pages,'pages');
+     
        let Products=await TotalProductView(pageNum,lmt)
         res.render('users/allproducts',{Products,Pages,name})
       
@@ -749,11 +748,11 @@ signIn:(req,res,next)=>
    {
     try
     {
-      let name=req.session.user.firstName
-      let userId=req.body._id
-      console.log(req.body,'editdetails');
+      const name = req.session.user.firstName
+      const userId = req.body._id
       
-          let usersPro=await editAccount(userId)
+      
+          let usersPro = await editAccount(userId)
           accountEdit(req.body,userId).then((response)=>
           {
             if(response.status)
@@ -790,7 +789,7 @@ signIn:(req,res,next)=>
    {
     try
     {
-      let name=req.session.user.firstName
+      const name = req.session.user.firstName
       res.render('users/addAddress',{user:true,name})
     }
     catch(error)
@@ -803,8 +802,8 @@ signIn:(req,res,next)=>
    newAddaddr:(req,res,next)=>
    {
     try{
-      let userId=req.session.user._id
-      console.log(req.body,userId);
+      let userId = req.session.user._id
+      
       addressSubmit(req.body,userId).then((response)=>
       {
         res.json({status:true})
@@ -821,10 +820,10 @@ signIn:(req,res,next)=>
    addressChange:async(req,res,next)=>
    {
     try{
-      let name=req.session.user.firstName
-      let userId=req.session.user._id
-      let Address=await allAddresses(userId)
-      console.log(Address,'bbbcch');
+      const name = req.session.user.firstName
+      let userId = req.session.user._id
+      let Address = await allAddresses(userId)
+   
         res.render('users/selectAdresses',{user:true,Address,name})
       
       
@@ -839,11 +838,11 @@ signIn:(req,res,next)=>
   {
     try
     {
-      console.log(req.session.user,'session');
-      let userId=req.session.user._id
+      
+      let userId = req.session.user._id
    
-      let adId=req.params.id
-      console.log(userId,adId,'new');
+      let adId = req.params.id
+      
       chngeDefault(adId,userId).then((response)=>
       {
         res.json({status:true})
@@ -859,8 +858,8 @@ signIn:(req,res,next)=>
   {
     try
     {
-      let name=req.session.user.firstName
-      let data=req.query.search
+      const name = req.session.user.firstName
+      let data = req.query.search
        SrchPro(data).then((SrchItem)=>
        {
         res.render('users/searchproductlist',{user:true,name,SrchItem})
@@ -883,13 +882,13 @@ signIn:(req,res,next)=>
   {
     try
     {
-      let Coupon=req.body
-      console.log(Coupon,'hgfff');
-      let Total=await getTotal(req.session.user._id)
-      console.log(Total,'ttle');
+      let Coupon = req.body
+     
+      let Total = await getTotal(req.session.user._id)
+      
        checkCoupon(Coupon,Total[0].total).then((response)=>
       {
-        console.log(response,'undo coupon');
+       
         res.json(response)
       })
      
@@ -901,7 +900,7 @@ signIn:(req,res,next)=>
  },
  returnProducts:(req,res,next)=>
  {
-  let ID=req.params.id
+  let ID = req.params.id
   returnOrder(ID).then((response)=>{
     res.redirect('/orderlist')
   })
@@ -910,7 +909,7 @@ signIn:(req,res,next)=>
   try {
      let orderid = req.body['order[orderid]']
     req.session.orderID = orderid
-    console.log(req.body);
+   
        let signature = req.body['payment[razorpay_signature]']
        signature.trim()
       let hmac = crypto.createHmac('sha256',process.env.KeySecret)
@@ -918,7 +917,7 @@ signIn:(req,res,next)=>
       hmac = hmac.digest('hex')
       hmac.trim()
         
-      console.log(signature ==hmac);
+     
       if(signature ==hmac){
           
           verifyPaymentRazorpay(orderid).then((response)=>{
@@ -934,6 +933,64 @@ signIn:(req,res,next)=>
   res.render('error', { message: error.message, code: 500, layout: 'error-layout' });  
   }
 },
+
+WishlistView:async(req,res,next)=>
+{
+  try{
+    const name = req.session.user.firstName
+    let cartCount=await getcartCount(req.session.user._id)
+    wishItemview(req.session.user._id).then((wishList)=>
+    {
+      
+     
+      res.render('users/wishlist',{user:true,name,wishList,cartCount})
+    })
+  }
+  catch(error){
+  
+    res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+}
+
+
+ 
+  
+},
+addWish:(req,res,next)=>
+{
+  try{
+    let productid = req.body.ProductId
+    
+    let userid = req.session.user._id
+    
+    addtoWish(productid,userid).then((response)=>
+    {
+    res.json(response)
+    })
+  }
+  catch(error){
+  
+      res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+  }
+  
+ 
+ 
+},
+removeWish:(req,res,next)=>{
+
+  try
+  {
+    removeProductwish(req.body).then((response)=>
+    {
+     res.json(response)
+    })
+  }
+  catch(error)
+  {
+      res.render('error', { message: error.message, code: 500, layout: 'error-layout' });
+  }
+
+
+}
 
  
   }
