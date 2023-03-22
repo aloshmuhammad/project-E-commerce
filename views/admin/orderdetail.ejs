@@ -241,8 +241,14 @@
 
 
                
-                swal('Status Successfully Changed')
-               location.reload()
+                swal({
+                     title: "Good job!",
+                     text: "Your Order Status Is Changed",
+                    icon: "success",
+                   button: "Aww yiss!",
+                    });
+                    location.reload()
+              
               }
             
         }

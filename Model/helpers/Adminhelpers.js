@@ -468,7 +468,7 @@ deleteCoupons:(Id)=>
     return new Promise(async(resolve,reject)=>
     {
         await db.get().collection(collection.COUPONCOLLECTION).deleteOne({_id:objectId(Id)}).then((response)=>
-        {
+        { response.removeItem=true
             resolve(response)
         })
     })

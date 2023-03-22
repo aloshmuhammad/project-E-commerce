@@ -447,6 +447,8 @@ getTotal:(userid)=>
                  await db.get().collection(collection.ORDERCOLLECTION).insertOne(orderObj).then((response)=>
                  {
                      db.get().collection(collection.CARTCOLLECTION).deleteOne({user:objectId(userId)})
+                     response.Amount=orderObj.totalAmount
+                     console.log(response,'bug');
                   resolve(response)
                  })
             })
@@ -500,7 +502,8 @@ getTotal:(userid)=>
                         $project:{
                             item:'$products.item',
                             quantity:'$products.quantity',
-                            DeliveredDate:'$DeliveredDate'
+                            DeliveredDate:'$DeliveredDate',
+                            status:'$status'
                         }
                     },
                     {
@@ -513,7 +516,7 @@ getTotal:(userid)=>
                     },
                     {
                         $project:{
-                            item:1,DeliveredDate:1,quantity:1,product:{$arrayElemAt:['$products',0]}
+                            item:1,status:1,DeliveredDate:1,quantity:1,product:{$arrayElemAt:['$products',0]}
                         }
                     },
                  

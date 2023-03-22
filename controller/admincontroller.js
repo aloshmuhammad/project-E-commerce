@@ -541,11 +541,11 @@ couponView:async(req,res,next)=>
 DeleteCoupon:(req,res,next)=>
 {
     try{
-        const Id = req.query.id
+        const Id = req.body.coupon
     
         deleteCoupons(Id).then((response)=>
         {
-            res.redirect('/admin/view-coupons')
+            res.json(response)
         })
     }
     catch(error)

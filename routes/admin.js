@@ -73,7 +73,7 @@ router.route('/add-coupon')
     .get(verifyAdmin,AddCoupon)
     .post(verifyAdmin,addNewcpn)
 router.get('/view-coupons',verifyAdmin,couponView)
-router.get('/delete-coupon',verifyAdmin,DeleteCoupon)
+router.delete('/delete-coupon',verifyAdmin,DeleteCoupon)
 
 
 module.exports = router;

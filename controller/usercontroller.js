@@ -383,7 +383,7 @@ signIn:(req,res,next)=>
       {
        let orderId = response.insertedId
        req.session.orderID = orderId
-       req.session.totalamount = totalamount[0].total
+       req.session.totalamount = response.Amount
       
    
 
@@ -407,14 +407,14 @@ signIn:(req,res,next)=>
               "items": [{
                 "name": "Redhock Bar Soap",
                 "sku": "001",
-                "price": totalamount[0].total,
+                "price": req.session.totalamount,
                 "currency": "USD",
                 "quantity": 1
               }]
             },
             "amount": {
               "currency": "USD",
-              "total": totalamount[0].total,
+              "total": req.session.totalamount,
             },
             "description": "Molla Fashion Store"
           }]
@@ -436,7 +436,7 @@ signIn:(req,res,next)=>
    }
    else if(req.body.paymentmethod=='razorpay')
    {
-    generateRazorpay(orderId,totalamount[0].total).then((order)=>
+    generateRazorpay(orderId,req.session.totalamount).then((order)=>
     {
      
      res.render('users/RazorPay',{order})
@@ -477,10 +477,10 @@ signIn:(req,res,next)=>
          paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
           //When error occurs when due to non-existent transaction, throw an error else log the transaction details in the console then send a Success string reposponse to the user.
           if (error) {
-            console.log(error.response);
+            
             throw error;
           } else {
-            console.log(JSON.stringify(payment));
+            
            
             paymentStatusChange(orderID).then((response)=>{
                 res.render('users/ordersucess')
@@ -546,6 +546,7 @@ signIn:(req,res,next)=>
        const date2 = new Date(orderedproducts[0].DeliveredDate);
        const diffTime = Math.abs(date1 - date2);
        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+       
     
 
       res.render('users/orderdetails',{orderedproducts,diffDays,user:true,name})
