@@ -1,3 +1,4 @@
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -7,10 +8,7 @@ var session = require("express-session");
 var ejs=require('ejs')
 var expressLayouts = require('express-ejs-layouts')
 var db=require('./Model/connection');
-// const accountSid = "AC747f476ab4a199fe300bb38a7a7cd7a6";
-// const authToken = process.env.TWILIO_AUTH_TOKEN;
-// const verifySid = "VA4d8995d050b8dbd80d04800051f210ca";
-// const client = require("twilio")(accountSid, authToken);
+
 
 var adminRouter = require('./routes/admin');
 var usersRouter = require('./routes/users');
@@ -59,10 +57,17 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+  let layout='layout'
+  let admin=false
+  if(req.session.loggedInad)
+  {
+    layout='admin/adminlayout'
+    admin=true
+  }
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error',{layout,admin});
 });
 
 
