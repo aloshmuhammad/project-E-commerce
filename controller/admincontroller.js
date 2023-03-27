@@ -35,7 +35,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -52,7 +53,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -77,7 +79,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -98,7 +101,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -122,7 +126,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -141,7 +146,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -152,7 +158,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -178,7 +185,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -191,7 +199,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -207,7 +216,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -221,7 +231,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -234,7 +245,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -247,7 +259,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -271,7 +284,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -284,7 +298,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -299,7 +314,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -321,7 +337,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -337,7 +354,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -351,7 +369,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -373,7 +392,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -391,7 +411,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -404,7 +425,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -418,7 +440,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -429,7 +452,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -442,7 +466,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -455,7 +480,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
@@ -470,7 +496,8 @@ module.exports = {
       res.render("error", {
         message: error.message,
         code: 500,
-        layout: "error-layout",admin:true
+        layout: "error-layout",
+        admin: true,
       });
     }
   },
