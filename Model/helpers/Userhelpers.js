@@ -869,6 +869,7 @@ module.exports = {
     });
   },
   checkCoupon: (Data, Total) => {
+    console.log(Data.coupon,'buggs');
     return new Promise(async (resolve, reject) => {
       let validCoupon = await db
         .get()
@@ -876,6 +877,7 @@ module.exports = {
         .findOne({ couponid: Data.coupon, date: { $gte: new Date() } });
 
       if (validCoupon != null) {
+        console.log('KERIYO');
         let offerPer = parseInt(validCoupon.offerpercentage);
 
         let discAmt = (Total * offerPer) / 100;
