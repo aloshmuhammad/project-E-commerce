@@ -90,7 +90,7 @@
             data:$('#add-Address').serialize(),
             success:(response)=>
             {
-             swal('Address Added Successfully')
+             Swal.fire('Address Added Successfully')
              if(response.status)
              { console.log(response.status);
                window.location.href='/order-payment'
